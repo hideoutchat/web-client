@@ -1,0 +1,33 @@
+html {
+  align-items: stretch;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  left: 0;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+}
+
+body {
+  align-items: stretch;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+body > div {
+  align-items: stretch;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+}
