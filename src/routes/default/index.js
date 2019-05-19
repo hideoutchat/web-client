@@ -1,9 +1,10 @@
+import styled, { keyframes } from 'styled-components';
+
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import { connect } from 'react-redux';
 import setName from '/redux/actions/set-name';
-import styled from 'styled-components';
 
 const invoke = (object, key, ...args) => {
   if (typeof object[key] === 'function') {
@@ -24,6 +25,16 @@ const withEventInterception = (f) => (event) => {
   return f(event);
 };
 
+const Electric = keyframes`
+  from {
+    stroke: ${(props) => props.theme.color.action.border};
+  }
+
+  to {
+    stroke: #3090f0;
+  }
+`;
+
 const Vector = styled.svg`
   stroke-width: 4;
   height: 128px;
@@ -36,6 +47,11 @@ const Dot = styled.rect.attrs({ height: 16, width: 16 })`
 `;
 
 const Dash = styled.path`
+  animation-name: ${Electric};
+  animation-direction: alternate;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
   fill: none;
   stroke: ${(props) => props.theme.color.action.border};
   stroke-width: 4;
