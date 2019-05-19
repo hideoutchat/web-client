@@ -1,10 +1,8 @@
-import styled, { keyframes } from 'styled-components';
-
+import Introduction from './introduction';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { connect } from 'react-redux';
-import setName from '/redux/actions/set-name';
+import styled from 'styled-components';
 
 const invoke = (object, key, ...args) => {
   if (typeof object[key] === 'function') {
@@ -25,74 +23,9 @@ const withEventInterception = (f) => (event) => {
   return f(event);
 };
 
-const Electric = keyframes`
-  from {
-    stroke: ${(props) => props.theme.color.action.border};
-  }
-
-  to {
-    stroke: #3090f0;
-  }
-`;
-
-const Vector = styled.svg`
-  stroke-width: 4;
-  height: 128px;
-  width: 128px;
-`;
-
-const Dot = styled.rect.attrs({ height: 16, width: 16 })`
-  stroke: none;
-  fill: ${(props) => props.theme.color.primary.foreground};
-`;
-
-const Dash = styled.path`
-  animation-name: ${Electric};
-  animation-direction: alternate;
-  animation-duration: 2s;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
-  fill: none;
-  stroke: ${(props) => props.theme.color.action.border};
-  stroke-width: 4;
-`;
-
-const Logo = () => <Vector>
-  <Dash d="m 16,16 v 64 v -32 h 64 v 32"/>
-  <Dot x="8" y="8"/>
-  <Dot x="8" y="40"/>
-  <Dot x="40" y="40"/>
-  <Dot x="72" y="40"/>
-  <Dot x="72" y="72"/>
-  <Dot x="8" y="72"/>
-</Vector>;
-
-const Screen = styled.div`
-  align-items: center;
-  background-color: ${(props) => props.theme.color.primary.background};
-  background: linear-gradient(to bottom, ${(props) => props.theme.color.primary.background} 0%, rgba(4, 8, 16, 1) 100%);
-  color: ${(props) => props.theme.color.primary.foreground};
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  font-family: ${(props) => props.theme.typeface.normal};
-  padding: ${(props) => props.theme.space.large};
-`;
-
-const Introduction = styled.div`
-  flex: 1;
-  text-align: center;
-
-  p {
-    margin: 0 0 ${(props) => props.theme.space.normal};
-    padding: 0;
-  }
-`;
-
 const Field = styled.div`
   align-items: stretch;
   display: flex;
-  flex: 1;
   flex-direction: column;
   padding: ${(props) => props.theme.space.normal};
 `;
@@ -174,8 +107,15 @@ const Label = styled.label`
 const StyledForm = styled.form`
   align-items: center;
   display: flex;
-  flex: 2;
+  flex: 1;
   flex-direction: column;
+`;
+
+const Content = styled.div`
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
 `;
 
 class Form extends React.Component {
@@ -205,10 +145,19 @@ class Form extends React.Component {
     const { handleNameChange, handleCommit, state: { name } } = this;
 
     return <StyledForm onSubmit={handleCommit}>
-      <Field>
-        <TextInput autoFocus onChange={handleNameChange} value={name}/>
-        <Label>Your &quot;name&quot;</Label>
-      </Field>
+      <Content>
+        <div>
+          <Introduction>
+            <p>It looks like this is your first time here.</p>
+            <p><b>Relax.</b> I am getting a key ready for you now.</p>
+            <p>In the meantime, what would you like to be called?</p>
+          </Introduction>
+          <Field>
+            <TextInput autoFocus onChange={handleNameChange} value={name}/>
+            <Label>Your &quot;name&quot; &mdash; if empty, I shall choose for you.</Label>
+          </Field>
+        </div>
+      </Content>
       <Actions>
         <Action>Continue</Action>
       </Actions>
@@ -216,24 +165,4 @@ class Form extends React.Component {
   }
 }
 
-const DefaultRoute = ({ onCommit }) => <Screen>
-  <Logo/>
-  <Introduction>
-    <p>It looks like this is your first time here.</p>
-    <p><b>Relax.</b> I&apos;m getting a key ready for you now.</p>
-    <p>In the meantime, what would you like to be called?</p>
-  </Introduction>
-  <Form onCommit={onCommit}/>
-</Screen>;
-
-const { func } = PropTypes;
-
-DefaultRoute.propTypes = {
-  onCommit: func.isRequired
-};
-
-export { DefaultRoute };
-
-export default connect(null, (dispatch) => ({
-  onCommit: ({ name }) => dispatch(setName(name))
-}))(DefaultRoute);
+export default Form;

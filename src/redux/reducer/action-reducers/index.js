@@ -1,5 +1,5 @@
 const createActionReducers = () => ({
-  // TODO: Define the state-affecting actions.
+  NAME: (state, action) => ({ ...state, name: action.name })
 });
 
 export default createActionReducers;

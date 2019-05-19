@@ -11,6 +11,9 @@ const createDarkTheme = () => ({
       foreground: '#f0f0f0'
     }
   },
+  gradient: {
+    screen: 'linear-gradient(to bottom, #221f27 0%, #040810 100%)'
+  },
   shadow: {
     high: 'rgba(0, 0, 0, 0.5)',
     low: 'rgba(0, 0, 0, 0.1)',
