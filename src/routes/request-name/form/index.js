@@ -1,6 +1,7 @@
 import Introduction from './introduction';
 import PropTypes from 'prop-types';
 import React from 'react';
+import TextInput from '/components/text-input';
 
 import styled from 'styled-components';
 
@@ -71,32 +72,6 @@ const Action = styled.button`
   }
 `;
 
-const TextInput = styled.input.attrs({ placeholder: 'e.g: DB Cooper', type: 'text' })`
-  background: none;
-  border-color: ${(props) => props.theme.color.primary.border};
-  border-style: solid;
-  border-width: 0 0 2px 0;
-  color: inherit;
-  font-family: inherit;
-  font-size: 2em;
-  line-height: 1.5em;
-  margin: 0 auto;
-  padding: 0 ${(props) => props.theme.space.normal};
-  width: 80%;
-  ${(props) => props.theme.transition('border-color')}
-
-  :active,
-  :focus,
-  :hover {
-    border-color: ${(props) => props.theme.color.action.border};
-  }
-
-  :active:hover,
-  :focus:hover {
-    border-color: ${(props) => props.theme.color.action.border};
-  }
-`;
-
 const Label = styled.label`
   font-size: 0.8em;
   margin: 0 auto;
@@ -137,9 +112,7 @@ class Form extends React.Component {
     });
   });
 
-  handleNameChange = withEventInterception((event) => {
-    this.setState({ name: event.target.value });
-  });
+  handleNameChange = (name) => this.setState({ name });
 
   render() {
     const { handleNameChange, handleCommit, state: { name } } = this;
@@ -153,7 +126,7 @@ class Form extends React.Component {
             <p>In the meantime, what would you like to be called?</p>
           </Introduction>
           <Field>
-            <TextInput autoFocus onChange={handleNameChange} value={name}/>
+            <TextInput isAutoFocus onChange={handleNameChange} placeholder="e.g: DB Cooper" value={name}/>
             <Label>Your &quot;name&quot; &mdash; if empty, I shall choose for you.</Label>
           </Field>
         </div>

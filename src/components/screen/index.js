@@ -9,6 +9,7 @@ const Screen = styled.div`
   flex: 1;
   flex-direction: column;
   font-family: ${(props) => props.theme.typeface.normal};
+  overflow: hidden;
   padding: ${(props) => props.theme.space.large};
 `;
 
