@@ -24,7 +24,7 @@ const withEventInterception = (f) => (event) => {
 
 const StyledTextInput = styled.input`
   background: none;
-  border-color: ${(props) => props.theme.color.primary.border};
+  border-color: ${(props) => props.theme.color.action.borderInactive};
   border-style: solid;
   border-width: 0 0 2px 0;
   color: inherit;

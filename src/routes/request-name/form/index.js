@@ -40,7 +40,7 @@ const Actions = styled.div`
 const Action = styled.button`
   background: none;
   background-color: ${(props) => props.theme.shadow.low};
-  border-color: ${(props) => props.theme.color.primary.border};
+  border-color: ${(props) => props.theme.color.action.borderInactive};
   border-radius: 2px;
   border-style: solid;
   border-width: 1px;
