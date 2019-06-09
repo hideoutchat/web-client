@@ -17,6 +17,12 @@ const createDarkTheme = () => ({
   gradient: {
     screen: 'linear-gradient(to bottom, #221f27 0%, #040810 100%)'
   },
+  highlight: {
+    high: 'rgba(255, 255, 255, 0.175)',
+    low: 'rgba(255, 255, 255, 0.05)',
+    medium: 'rgba(255, 255, 255, 0.125)',
+    off: 'rgba(255, 255, 255, 0)'
+  },
   shadow: {
     high: 'rgba(0, 0, 0, 0.35)',
     low: 'rgba(0, 0, 0, 0.1)',
@@ -38,7 +44,7 @@ const createDarkTheme = () => ({
   typeface: {
     normal: '400 14px PT Sans, Helvetica, sans-serif',
     paragraph: '400 14px PT Sans, Helvetica, sans-serif',
-    title: '400 14px PT Sans, Helvetica, sans-serif'
+    title: '400 14px Oswald, Helvetica, sans-serif'
   }
 });
 

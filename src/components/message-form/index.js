@@ -1,3 +1,5 @@
+import ActionIcon from '/components/action-icon';
+import AddAttachmentIcon from '/components/add-attachment-icon';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -105,6 +107,9 @@ class MessageForm extends React.Component {
     } = this;
     return <Form onSubmit={handleSubmit}>
       <Text ref={inputRef} autoFocus disabled={isDisabled} onChange={handleTextChange} placeholder="Write your message here..." type="text" value={text}/>
+      <ActionIcon>
+        <AddAttachmentIcon/>
+      </ActionIcon>
     </Form>;
   }
 }

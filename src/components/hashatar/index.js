@@ -6,8 +6,12 @@ import styled from 'styled-components';
 
 const Vector = styled.svg.attrs({ viewBox: '0 0 256 256' })`
   background-color: #ffffff;
+  border-color: inherit;
   border-radius: 50%;
+  border-style: solid;
+  border-width: 2px;
   box-shadow: 0 0 1px #000000;
+  box-sizing: border-box;
   color: #000000;
   height: 1em;
   width: 1em;

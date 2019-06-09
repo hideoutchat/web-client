@@ -62,10 +62,7 @@ const PeerListItem = styled.div`
 
 const PeerAvatar = styled.div`
   background-color: #000000;
-  border-color: ${(props) => props.theme.color.action.border};
   border-radius: 50%;
-  border-style: solid;
-  border-width: 2px;
   font-size: 48px;
   height: 48px;
   margin: ${(props) => props.theme.space.normal};

@@ -110,8 +110,34 @@ const goBack = (history) => () => history.go(BACK);
 const PrivateChatRoute = ({ history }) => <Screen>
   <Panel
     content={<Children>
-      <MessageList count={1}>
-        <MessageListItem lines={[{ text: 'Hello, world!', timestamp: new Date().toISOString() }]} sender={{ displayName: 'frenzied porcupine', id: 'fizz', isTrusted: true }}/>
+      <MessageList count={2}>
+        <MessageListItem
+          lines={[
+            { text: 'Hello, world!', timestamp: new Date().toISOString() },
+            { text: 'This is the second message I sent to you.', timestamp: new Date().toISOString() }
+          ]}
+          reactions={[]}
+          sender={{
+            color: '#f09030',
+            displayName: 'frenzied porcupine',
+            id: 'fizz',
+            isTrusted: true
+          }}
+        />
+        <MessageListItem
+          lines={[
+            { text: 'Word up, hoss.', timestamp: new Date(Date.now()).toISOString() }
+          ]}
+          reactions={[
+            { count: 1, emoji: '👍' }
+          ]}
+          sender={{
+            color: '#3090f0',
+            displayName: 'disgruntled lemur',
+            id: 'buzz',
+            isTrusted: true
+          }}
+        />
       </MessageList>
     </Children>}
     footer={<Footer>

@@ -8,6 +8,7 @@ const MenuIcon = styled.div`
   display: flex;
   font-size: 14px;
   height: 32px;
+  overflow: hidden;
   text-align: center;
   transition-duration: 100ms;
   transition-property: background-color;
