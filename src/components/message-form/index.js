@@ -1,7 +1,9 @@
 import ActionIcon from '/components/action-icon';
+import ActionIconTransition from '/components/action-icon-transition';
 import AddAttachmentIcon from '/components/add-attachment-icon';
 import PropTypes from 'prop-types';
 import React from 'react';
+import SendIcon from '/components/send-icon';
 
 import styled from 'styled-components';
 import theme from '/utilities/styled/theme';
@@ -108,7 +110,8 @@ class MessageForm extends React.Component {
     return <Form onSubmit={handleSubmit}>
       <Text ref={inputRef} autoFocus disabled={isDisabled} onChange={handleTextChange} placeholder="Write your message here..." type="text" value={text}/>
       <ActionIcon>
-        <AddAttachmentIcon/>
+        <ActionIconTransition isActive={Boolean(text)} render={(style) => <SendIcon style={style}/>}/>
+        <ActionIconTransition isActive={!text} render={(style) => <AddAttachmentIcon style={style}/>}/>
       </ActionIcon>
     </Form>;
   }

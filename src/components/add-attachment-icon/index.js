@@ -1,17 +1,15 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import VectorIcon from '/components/vector-icon';
 
-import styled from 'styled-components';
+const AddAttachmentIcon = ({ style }) => <VectorIcon style={style}>
+  <path d="M 120 4 h 16 v 116 h 116 v 16 h -116 v 116 h -16 v -116 h -116 v -16 h 116 z"/>
+</VectorIcon>;
 
-const Vector = styled.svg.attrs({ fill: 'currentColor', viewBox: '0 0 256 256' })`
-  height: 1em;
-  margin: auto;
-  width: 1em;
-`;
+const { object } = PropTypes;
 
-const AddAttachmentIcon = () => <Vector>
-  <rect height="244" width="16" x="120" y="4"/>
-  <rect height="16" width="124" x="4" y="120"/>
-  <rect height="16" width="124" x="136" y="120"/>
-</Vector>;
+AddAttachmentIcon.propTypes = {
+  style: object
+};
 
 export default AddAttachmentIcon;

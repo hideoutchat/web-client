@@ -10,6 +10,18 @@ const StyledActionIcon = styled.div`
   border-radius: 50%;
   color: ${theme('color', 'action', 'foreground')};
   height: 2em;
+  transform: scaleX(1) scaleY(1);
+
+  ${({ theme }) => theme.transition('transform')}
+
+  :active,
+  :hover {
+    transform: scaleX(1.1) scaleY(1.1);
+  }
+
+  :active:hover {
+    transform: scaleX(1.2) scaleY(1.2);
+  }
 `;
 
 const ActionIcon = ({ children }) => <StyledActionIcon>

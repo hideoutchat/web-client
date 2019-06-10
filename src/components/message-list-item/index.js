@@ -25,7 +25,7 @@ const MessageListItem = ({ lines, reactions, sender }) => <Message>
     </Gutter>
     <Content>
       <Header>
-        <Sender style={{ color: sender.color }}>{sender.displayName}</Sender>
+        <Sender>{sender.displayName}</Sender>
         <Time title={lines[0].timestamp}>{timeFormat.format(new Date(lines[0].timestamp))}</Time>
       </Header>
       <Text>

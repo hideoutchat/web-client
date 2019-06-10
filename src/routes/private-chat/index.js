@@ -126,7 +126,7 @@ const PrivateChatRoute = ({ history }) => <Screen>
         />
         <MessageListItem
           lines={[
-            { text: 'Word up, hoss.', timestamp: new Date(Date.now()).toISOString() }
+            { text: 'Word up, hoss.', timestamp: new Date().toISOString() }
           ]}
           reactions={[
             { count: 1, emoji: '👍' }

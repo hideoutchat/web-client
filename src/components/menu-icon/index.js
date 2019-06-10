@@ -9,6 +9,7 @@ const MenuIcon = styled.div`
   font-size: 14px;
   height: 32px;
   overflow: hidden;
+  position: relative;
   text-align: center;
   transition-duration: 100ms;
   transition-property: background-color;
@@ -23,6 +24,14 @@ const MenuIcon = styled.div`
 
   :active:hover {
     background-color: ${theme('shadow', 'high')};
+  }
+
+  > * {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 `;
 
