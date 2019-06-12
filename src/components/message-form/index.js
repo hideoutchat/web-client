@@ -109,7 +109,7 @@ class MessageForm extends React.Component {
     } = this;
     return <Form onSubmit={handleSubmit}>
       <Text ref={inputRef} autoFocus disabled={isDisabled} onChange={handleTextChange} placeholder="Write your message here..." type="text" value={text}/>
-      <ActionIcon>
+      <ActionIcon onClick={handleSubmit}>
         <ActionIconTransition isActive={Boolean(text)} render={(style) => <SendIcon style={style}/>}/>
         <ActionIconTransition isActive={!text} render={(style) => <AddAttachmentIcon style={style}/>}/>
       </ActionIcon>

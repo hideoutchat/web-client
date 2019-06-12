@@ -1,3 +1,4 @@
+import ActionList from './action-list';
 import Avatar from './avatar';
 import Content from './content';
 import Gutter from './gutter';
@@ -16,7 +17,8 @@ import Time from './time';
 
 const timeFormat = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric' });
 
-const MessageListItem = ({ lines, reactions, sender }) => <Message>
+const MessageListItem = ({ actions, lines, onSelect, reactions, sender }) => <Message onLongPress={onSelect}>
+  {actions && <ActionList>{actions}</ActionList>}
   <Line>
     <Gutter>
       <Avatar style={{ borderColor: sender.color }}>
@@ -48,13 +50,15 @@ const MessageListItem = ({ lines, reactions, sender }) => <Message>
   </ReactionList>
 </Message>;
 
-const { arrayOf, bool, number, shape, string } = PropTypes;
+const { arrayOf, bool, func, node, number, shape, string } = PropTypes;
 
 MessageListItem.propTypes = {
+  actions: node,
   lines: arrayOf(shape({
     text: string.isRequired,
     timestamp: string.isRequired
   })).isRequired,
+  onSelect: func.isRequired,
   reactions: arrayOf(shape({
     count: number.isRequired,
     emoji: string.isRequired

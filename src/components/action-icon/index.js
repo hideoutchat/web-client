@@ -24,7 +24,7 @@ const StyledActionIcon = styled.div`
   }
 `;
 
-const ActionIcon = ({ children }) => <StyledActionIcon>
+const ActionIcon = ({ children, ...otherProps }) => <StyledActionIcon {...otherProps}>
   <MenuIcon>
     {children}
   </MenuIcon>

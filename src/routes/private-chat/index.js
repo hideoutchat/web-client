@@ -1,5 +1,7 @@
 import Hamburger from '/components/hamburger';
+import Menu from '/components/menu';
 import MenuIcon from '/components/menu-icon';
+import MenuItem from '/components/menu-item';
 import MessageForm from '/components/message-form';
 import MessageList from '/components/message-list';
 import MessageListItem from '/components/message-list-item';
@@ -112,10 +114,14 @@ const PrivateChatRoute = ({ history }) => <Screen>
     content={<Children>
       <MessageList count={2}>
         <MessageListItem
+          actions={<Menu>
+            <MenuItem>Delete message...</MenuItem>
+          </Menu>}
           lines={[
             { text: 'Hello, world!', timestamp: new Date().toISOString() },
             { text: 'This is the second message I sent to you.', timestamp: new Date().toISOString() }
           ]}
+          onSelect={() => true}
           reactions={[]}
           sender={{
             color: '#f09030',
@@ -125,9 +131,13 @@ const PrivateChatRoute = ({ history }) => <Screen>
           }}
         />
         <MessageListItem
+          actions={<Menu>
+            <MenuItem>Delete message...</MenuItem>
+          </Menu>}
           lines={[
             { text: 'Word up, hoss.', timestamp: new Date().toISOString() }
           ]}
+          onSelect={() => true}
           reactions={[
             { count: 1, emoji: '👍' }
           ]}
@@ -155,6 +165,9 @@ const PrivateChatRoute = ({ history }) => <Screen>
         <MenuIcon title="Groups">
           <UserGroupIcon/>
         </MenuIcon>
+        <Menu>
+          <MenuItem>Leave chat...</MenuItem>
+        </Menu>
       </Actions>
     </Header>}
   />
