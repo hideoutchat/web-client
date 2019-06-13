@@ -17,6 +17,7 @@ const StyledReactionListItem = styled.div`
   cursor: pointer;
   display: flex;
   flex-direction: row;
+  margin-bottom: ${theme('space', 'small')};
   margin-right: ${theme('space', 'normal')};
   padding: ${theme('space', 'small')};
   padding-right: 0;

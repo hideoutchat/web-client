@@ -15,13 +15,13 @@ import theme from '/utilities/styled/theme';
 import whenProp from '/utilities/styled/when-prop';
 
 const Screen = styled.div`
-  background-color: ${(props) => props.theme.color.primary.background};
-  background: ${(props) => props.theme.gradient.screen};
-  color: ${(props) => props.theme.color.primary.foreground};
+  background-color: ${theme('color', 'primary', 'background')};
+  background: ${theme('gradient', 'screen')};
+  color: ${theme('color', 'primary', 'foreground')};
   display: flex;
   flex: 1;
   flex-direction: column;
-  font-family: ${(props) => props.theme.typeface.normal};
+  font-family: ${theme('typeface', 'normal')};
   overflow: hidden;
   padding: 0;
 `;
@@ -106,6 +106,22 @@ const ActionBarSubtitle = styled.div`
   overflow: hidden;
 `;
 
+const Prologue = styled.div`
+  border-color: ${theme('color', 'primary', 'foreground')};
+  border-style: dotted;
+  border-width: 1px 0 0;
+  color: ${theme('color', 'primary', 'foreground')};
+  font: ${theme('typeface', 'normal')};
+  font-size: 12px;
+  margin: ${theme('space', 'small')} auto;
+  opacity: 0.1;
+  padding: ${theme('space', 'small')};
+  pointer-events: none;
+  text-align: center;
+  user-select: none;
+  width: 75%;
+`;
+
 const BACK = -1;
 const goBack = (history) => () => history.go(BACK);
 
@@ -113,6 +129,7 @@ const PrivateChatRoute = ({ history }) => <Screen>
   <Panel
     content={<Children>
       <MessageList count={2}>
+        <Prologue>This is the beginning of your conversation with frenzied porcupine.</Prologue>
         <MessageListItem
           actions={<Menu>
             <MenuItem>Add reaction...</MenuItem>

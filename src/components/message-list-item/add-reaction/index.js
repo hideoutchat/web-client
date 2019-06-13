@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import theme from '/utilities/styled/theme';
 
-const StyledAddReaction = styled.div`
+const StyledAddReaction = styled.div.attrs({ title: 'Add your reaction' })`
   align-items: center;
   background-color: ${theme('highlight', 'none')};
   border-color: ${theme('highlight', 'medium')};
@@ -17,6 +17,7 @@ const StyledAddReaction = styled.div`
   display: flex;
   flex-direction: row;
   font-size: 12px;
+  margin-bottom: ${theme('space', 'small')};
   padding: ${theme('space', 'small')};
   user-select: none;
 
