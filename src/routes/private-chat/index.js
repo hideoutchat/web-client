@@ -115,7 +115,9 @@ const PrivateChatRoute = ({ history }) => <Screen>
       <MessageList count={2}>
         <MessageListItem
           actions={<Menu>
-            <MenuItem>Delete message...</MenuItem>
+            <MenuItem>Add reaction...</MenuItem>
+            <MenuItem>Edit...</MenuItem>
+            <MenuItem>Delete...</MenuItem>
           </Menu>}
           lines={[
             { text: 'Hello, world!', timestamp: new Date().toISOString() },
@@ -132,14 +134,17 @@ const PrivateChatRoute = ({ history }) => <Screen>
         />
         <MessageListItem
           actions={<Menu>
-            <MenuItem>Delete message...</MenuItem>
+            <MenuItem>Add reaction...</MenuItem>
+            <MenuItem>Edit...</MenuItem>
+            <MenuItem>Delete...</MenuItem>
           </Menu>}
           lines={[
             { text: 'Word up, hoss.', timestamp: new Date().toISOString() }
           ]}
           onSelect={() => true}
           reactions={[
-            { count: 1, emoji: '👍' }
+            { count: 1, emoji: '👍' },
+            { count: 2, emoji: '🚀' }
           ]}
           sender={{
             color: '#3090f0',

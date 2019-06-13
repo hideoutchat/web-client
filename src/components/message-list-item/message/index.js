@@ -6,6 +6,7 @@ import React from 'react';
 import { Trigger } from '/components/menu';
 
 import attachLongPressEvent from '/utilities/dom/long-press-event';
+import theme from '/utilities/styled/theme';
 
 const fadeIn = keyframes`
   from {
@@ -20,7 +21,20 @@ const fadeIn = keyframes`
 const StyledMessage = styled.div`
   animation-duration: 100ms;
   animation-name: ${fadeIn};
+  background-color: ${theme('shadow', 'off')};
+
+  ${({ theme }) => theme.transition('background-color')}
+
   position: relative;
+
+  :active,
+  :hover {
+    background-color: ${theme('shadow', 'low')};
+  }
+
+  :active:hover {
+    background-color: ${theme('shadow', 'high')};
+  }
 
   > ${ActionList} ${Trigger} {
     opacity: 0;

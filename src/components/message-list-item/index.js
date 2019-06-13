@@ -1,4 +1,5 @@
 import ActionList from './action-list';
+import AddReaction from './add-reaction';
 import Avatar from './avatar';
 import Content from './content';
 import Gutter from './gutter';
@@ -47,6 +48,7 @@ const MessageListItem = ({ actions, lines, onSelect, reactions, sender }) => <Me
   </Line>)}
   <ReactionList>
     {reactions.map((it) => <ReactionListItem key={it.emoji} count={it.count} emoji={it.emoji}/>)}
+    {reactions.length > 0 && <AddReaction onReact={() => true}/>}
   </ReactionList>
 </Message>;
 

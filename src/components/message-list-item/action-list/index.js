@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import theme from '/utilities/styled/theme';
 
 const ActionList = styled.div`
-  margin-right: ${theme('space', 'normal')};
+  margin: ${theme('space', 'normal')} ${theme('space', 'normal')} 0 0;
   position: absolute;
   top: 0;
   right: 0;

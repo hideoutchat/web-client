@@ -19,23 +19,10 @@ const Line = styled.div`
   animation-duration: 100ms;
   animation-fill-mode: both;
   animation-name: ${fadeInFromBelow};
-  background-color: ${theme('shadow', 'off')};
   display: flex;
   flex-direction: row;
   line-height: 16px;
   padding: 4px;
-  transition-duration: 100ms;
-  transition-property: background-color;
-  transition-timing-function: ease-in-out;
-
-  :active,
-  :hover {
-    background-color: ${theme('shadow', 'low')};
-  }
-
-  :active:hover {
-    background-color: ${theme('shadow', 'high')};
-  }
 `;
 
 export default Line;
