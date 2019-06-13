@@ -1,4 +1,3 @@
-import Emoji from './emoji';
 import PropTypes from 'prop-types';
 import React from 'react';
 

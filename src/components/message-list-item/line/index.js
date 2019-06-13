@@ -1,7 +1,5 @@
 import styled, { keyframes } from 'styled-components';
 
-import theme from '/utilities/styled/theme';
-
 const fadeInFromBelow = keyframes`
   from {
     opacity: 0;
