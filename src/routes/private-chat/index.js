@@ -155,6 +155,7 @@ const PrivateChatRoute = ({ history }) => <Screen>
             <MenuItem>Edit...</MenuItem>
             <MenuItem>Delete...</MenuItem>
           </Menu>}
+          isOutbound
           lines={[
             { text: 'Word up, hoss.', timestamp: new Date().toISOString() }
           ]}

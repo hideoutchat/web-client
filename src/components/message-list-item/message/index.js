@@ -7,6 +7,7 @@ import { Trigger } from '/components/menu';
 
 import attachLongPressEvent from '/utilities/dom/long-press-event';
 import theme from '/utilities/styled/theme';
+import whenProp from '/utilities/styled/when-prop';
 
 const fadeIn = keyframes`
   from {
@@ -21,7 +22,10 @@ const fadeIn = keyframes`
 const StyledMessage = styled.div`
   animation-duration: 100ms;
   animation-name: ${fadeIn};
-  background-color: ${theme('shadow', 'off')};
+  background-color: ${(props) => props.isOutbound ? '#305090' : props.theme.highlight.low};
+  border-radius: ${theme('space', 'small')};
+  margin: ${theme('space', 'normal')};
+  padding: ${theme('space', 'small')} 0;
 
   ${({ theme }) => theme.transition('background-color')}
 
@@ -29,11 +33,11 @@ const StyledMessage = styled.div`
 
   :active,
   :hover {
-    background-color: ${theme('shadow', 'low')};
+    background-color: ${(props) => props.isOutbound ? '#284888' : props.theme.highlight.medium};
   }
 
   :active:hover {
-    background-color: ${theme('shadow', 'high')};
+    background-color: ${(props) => props.isOutbound ? '#204080' : props.theme.highlight.high};
   }
 
   > ${ActionList} ${Trigger} {
@@ -48,10 +52,17 @@ const StyledMessage = styled.div`
 `;
 
 class Message extends React.Component {
+  static get defaultProps() {
+    return {
+      isOutbound: false
+    };
+  }
+
   static get propTypes() {
-    const { func, node } = PropTypes;
+    const { bool, func, node } = PropTypes;
     return {
       children: node,
+      isOutbound: bool.isRequired,
       onLongPress: func
     };
   }
@@ -81,7 +92,7 @@ class Message extends React.Component {
   };
 
   render() {
-    return <StyledMessage ref={this.targetRef}>{this.props.children}</StyledMessage>;
+    return <StyledMessage ref={this.targetRef} isOutbound={this.props.isOutbound}>{this.props.children}</StyledMessage>;
   }
 }
 

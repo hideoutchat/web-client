@@ -18,7 +18,7 @@ import Time from './time';
 
 const timeFormat = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric' });
 
-const MessageListItem = ({ actions, lines, onSelect, reactions, sender }) => <Message onLongPress={onSelect}>
+const MessageListItem = ({ actions, isOutbound, lines, onSelect, reactions, sender }) => <Message isOutbound={isOutbound} onLongPress={onSelect}>
   {actions && <ActionList>{actions}</ActionList>}
   <Line>
     <Gutter>
@@ -56,6 +56,7 @@ const { arrayOf, bool, func, node, number, shape, string } = PropTypes;
 
 MessageListItem.propTypes = {
   actions: node,
+  isOutbound: bool,
   lines: arrayOf(shape({
     text: string.isRequired,
     timestamp: string.isRequired
