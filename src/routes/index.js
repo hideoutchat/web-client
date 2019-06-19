@@ -1,5 +1,6 @@
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 
+import DialogRoute from './dialog';
 import NetworkRoute from './network';
 import PrivateChatRoute from './private-chat';
 import React from 'react';
@@ -12,6 +13,7 @@ const createRoutes = () => {
     <Route component={WelcomeByNameRoute} exact path="/welcome"/>
     <Route component={NetworkRoute} exact path="/network"/>
     <Route component={PrivateChatRoute} exact path="/peers/:id"/>
+    <Route component={DialogRoute} path="/"/>
   </Router>;
 
   return Routes;

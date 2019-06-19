@@ -59,12 +59,15 @@ class TextInput extends React.Component {
   }
 
   static get propTypes() {
-    const { bool, func, string } = PropTypes;
+    const { bool, func, object, string } = PropTypes;
     return {
+      className: string,
       isAutoFocus: bool,
       isDisabled: bool,
       onChange: func.isRequired,
       placeholder: string,
+      style: object,
+      title: string,
       type: string,
       value: string.isRequired
     };
@@ -78,9 +81,12 @@ class TextInput extends React.Component {
     const {
       handleChange,
       props: {
+        className,
         isAutoFocus,
         isDisabled,
         placeholder,
+        style,
+        title,
         type,
         value
       }
@@ -88,9 +94,12 @@ class TextInput extends React.Component {
 
     return <StyledTextInput
       autoFocus={isAutoFocus}
+      className={className}
       disabled={isDisabled}
       onChange={handleChange}
       placeholder={placeholder}
+      style={style}
+      title={title}
       type={type}
       value={value}
     />;

@@ -185,7 +185,7 @@ const PrivateChatRoute = ({ history }) => <Screen>
       </Title>
       <Actions>
         <MenuIcon title="Groups">
-          <UserGroupIcon/>
+          <UserGroupIcon onClick={() => history.push('#!/dialogs/groups')}/>
         </MenuIcon>
         <Menu>
           <MenuItem>Leave chat...</MenuItem>

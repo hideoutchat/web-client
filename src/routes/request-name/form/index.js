@@ -1,9 +1,11 @@
+import Button from '/components/button';
 import Introduction from './introduction';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TextInput from '/components/text-input';
 
 import styled from 'styled-components';
+import theme from '/utilities/styled/theme';
 
 const invoke = (object, key, ...args) => {
   if (typeof object[key] === 'function') {
@@ -28,7 +30,7 @@ const Field = styled.div`
   align-items: stretch;
   display: flex;
   flex-direction: column;
-  padding: ${(props) => props.theme.space.normal};
+  padding: ${theme('space', 'normal')};
 `;
 
 const Actions = styled.div`
@@ -37,45 +39,10 @@ const Actions = styled.div`
   flex-direction: column;
 `;
 
-const Action = styled.button`
-  background: none;
-  background-color: ${(props) => props.theme.shadow.low};
-  border-color: ${(props) => props.theme.color.action.borderInactive};
-  border-radius: 2px;
-  border-style: solid;
-  border-width: 1px;
-  box-shadow: 1px 1px 1px ${(props) => props.theme.shadow.low};
-  color: ${(props) => props.theme.color.action.foreground};
-  cursor: pointer;
-  margin: 0;
-  outline: none;
-  padding: ${(props) => props.theme.space.large};
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
-  user-select: none;
-  ${(props) => props.theme.transition('background-color', 'border-color', 'color', 'text-shadow')}
-
-  :active,
-  :focus,
-  :hover {
-    background-color: ${(props) => props.theme.shadow.medium};
-    border-color: ${(props) => props.theme.color.action.border};
-  }
-
-  :active:hover {
-    background-color: ${(props) => props.theme.color.action.border};
-    color: ${(props) => props.theme.color.primary.background};
-    text-shadow: none;
-  }
-
-  ::-moz-focus-inner {
-    border-width: 0;
-  }
-`;
-
 const Label = styled.label`
   font-size: 0.8em;
   margin: 0 auto;
-  padding: ${(props) => props.theme.space.normal};
+  padding: ${theme('space', 'normal')};
   width: 80%;
 `;
 
@@ -132,7 +99,7 @@ class Form extends React.Component {
         </div>
       </Content>
       <Actions>
-        <Action>Continue</Action>
+        <Button onClick={handleCommit}>Continue</Button>
       </Actions>
     </StyledForm>;
   }
