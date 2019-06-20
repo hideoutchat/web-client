@@ -8,23 +8,12 @@ import MessageListItem from '/components/message-list-item';
 import Panel from '/components/panel';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Screen from '/components/screen';
 import UserGroupIcon from '/components/user-group-icon';
 
 import styled from 'styled-components';
 import theme from '/utilities/styled/theme';
 import whenProp from '/utilities/styled/when-prop';
-
-const Screen = styled.div`
-  background-color: ${theme('color', 'primary', 'background')};
-  background: ${theme('gradient', 'screen')};
-  color: ${theme('color', 'primary', 'foreground')};
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  font-family: ${theme('typeface', 'normal')};
-  overflow: hidden;
-  padding: 0;
-`;
 
 const Children = styled.div`
   align-items: stretch;
@@ -125,7 +114,7 @@ const Prologue = styled.div`
 const BACK = -1;
 const goBack = (history) => () => history.go(BACK);
 
-const PrivateChatRoute = ({ history }) => <Screen>
+const PrivateChatRoute = ({ history }) => <Screen style={{ minWidth: '80%' }}>
   <Panel
     content={<Children>
       <MessageList count={2}>

@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import theme from '/utilities/styled/theme';
 
 const Form = styled.form`
-  align-items: stretch;
+  align-items: center;
   display: flex;
   flex: 1;
   flex-direction: row;

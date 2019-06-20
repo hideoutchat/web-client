@@ -6,9 +6,18 @@ import Screen from '/components/screen';
 
 import { connect } from 'react-redux';
 import setName from '/redux/actions/set-name';
+import styled from 'styled-components';
+
+const Header = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+`;
 
 const RequestNameRoute = ({ onCommit }) => <Screen>
-  <Logo/>
+  <Header>
+    <Logo/>
+  </Header>
   <Form onCommit={onCommit}/>
 </Screen>;
 

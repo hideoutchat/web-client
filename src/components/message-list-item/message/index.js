@@ -22,7 +22,7 @@ const fadeIn = keyframes`
 const StyledMessage = styled.div`
   animation-duration: 100ms;
   animation-name: ${fadeIn};
-  background-color: ${(props) => props.isOutbound ? '#305090' : props.theme.highlight.low};
+  background-color: ${(props) => whenProp('isOutbound')(props.theme.shadow.low, props.theme.highlight.low)(props)};
   border-radius: ${theme('space', 'small')};
   margin: ${theme('space', 'normal')};
   padding: ${theme('space', 'small')} 0;
@@ -33,11 +33,11 @@ const StyledMessage = styled.div`
 
   :active,
   :hover {
-    background-color: ${(props) => props.isOutbound ? '#284888' : props.theme.highlight.medium};
+    background-color: ${(props) => whenProp('isOutbound')(props.theme.shadow.medium, props.theme.highlight.medium)(props)};
   }
 
   :active:hover {
-    background-color: ${(props) => props.isOutbound ? '#204080' : props.theme.highlight.high};
+    background-color: ${(props) => whenProp('isOutbound')(props.theme.shadow.high, props.theme.highlight.high)(props)};
   }
 
   > ${ActionList} ${Trigger} {

@@ -1,5 +1,3 @@
-import styled, { keyframes } from 'styled-components';
-
 import Fork from '/components/fork';
 import Hashatar from '/components/hashatar';
 import Logo from '/components/logo';
@@ -10,29 +8,30 @@ import Screen from '/components/screen';
 import TextInput from '/components/text-input';
 
 import { connect } from 'react-redux';
+import styled from 'styled-components';
+import theme from '/utilities/styled/theme';
 import visitPeer from '/redux/actions/visit-peer';
 
-const DriftIn = keyframes`
-  from {
-    transform: scale(0.5, 0.5) translateY(256px) skewX(10deg);
-    opacity: 0;
-  }
+const Header = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+`;
 
-  to {
-    transform: scale(1, 1) translateY(0) skewX(0deg);
-    opacity: 1;
-  }
+const Content = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `;
 
 const PeerList = styled.div`
   align-items: stretch;
-  animation-duration: 1s;
-  animation-name: ${DriftIn};
-  animation-timing-function: ease-in-out;
   display: flex;
   flex: 1;
   flex-direction: column;
-  margin: ${(props) => props.theme.space.huge} 0;
+  font: ${theme('typeface', 'normal')};
+  margin: ${theme('space', 'huge')} 0;
   overflow: auto;
   width: 90%;
 `;
@@ -45,18 +44,19 @@ const PeerListItem = styled.div`
   cursor: pointer;
   display: flex;
   flex-direction: row;
-  padding: ${(props) => props.theme.space.normal};
-  margin: 0 0 ${(props) => props.theme.space.tiny};
-  ${(props) => props.theme.transition('background-color', 'border-color', 'color')}
+  padding: ${theme('space', 'normal')};
+  margin: 0 0 ${theme('space', 'tiny')};
+
+  ${({ theme }) => theme.transition('background-color', 'border-color', 'color')}
 
   :active,
   :hover {
-    border-color: ${(props) => props.theme.color.action.border};
+    border-color: ${theme('color', 'action', 'border')};
   }
 
   :active:hover {
-    background-color: ${(props) => props.theme.color.action.border};
-    color: ${(props) => props.theme.color.primary.background};
+    background-color: ${theme('color', 'action', 'border')};
+    color: ${theme('color', 'primary', 'background')};
   }
 `;
 
@@ -65,13 +65,13 @@ const PeerAvatar = styled.div`
   border-radius: 50%;
   font-size: 48px;
   height: 48px;
-  margin: ${(props) => props.theme.space.normal};
+  margin: ${theme('space', 'normal')};
   width: 48px;
 `;
 
 const PeerSummary = styled.div`
   flex: 1;
-  margin: ${(props) => props.theme.space.normal};
+  margin: ${theme('space', 'normal')};
 `;
 
 const PeerName = styled.div`
@@ -86,6 +86,7 @@ const PeerActivity = styled.div`
 `;
 
 const Introduction = styled.div`
+  font: ${theme('typeface', 'normal')};
   text-align: center;
 `;
 
@@ -132,23 +133,27 @@ class NetworkRoute extends React.Component {
       condition={Boolean(name)}
       whenFalse={() => <Redirect to="/"/>}
       whenTrue={() => <Screen>
-        <Logo/>
-        <Introduction>
-          <p><b style={{ color: '#3090f0' }}>427</b> other people are here.</p>
-          <p>Looking for someone in particular?</p>
-          <TextInput isAutoFocus onChange={handlePeerNameFilterChange} value={peerNameFilter}/>
-        </Introduction>
-        <PeerList>
-          {filteredPeers.map((peer) => <PeerListItem key={peer.id} onClick={() => onPeerSelect(peer)}>
-            <PeerAvatar>
-              <Hashatar code={peer.id}/>
-            </PeerAvatar>
-            <PeerSummary>
-              <PeerName>{peer.name}</PeerName>
-              <PeerActivity>{peer.activity}</PeerActivity>
-            </PeerSummary>
-          </PeerListItem>)}
-        </PeerList>
+        <Header>
+          <Logo/>
+          <Introduction>
+            <p><b style={{ color: '#3090f0' }}>427</b> other people are here.</p>
+            <p>Looking for someone in particular?</p>
+            <TextInput isAutoFocus onChange={handlePeerNameFilterChange} value={peerNameFilter}/>
+          </Introduction>
+        </Header>
+        <Content>
+          <PeerList>
+            {filteredPeers.map((peer) => <PeerListItem key={peer.id} onClick={() => onPeerSelect(peer)}>
+              <PeerAvatar>
+                <Hashatar code={peer.id}/>
+              </PeerAvatar>
+              <PeerSummary>
+                <PeerName>{peer.name}</PeerName>
+                <PeerActivity>{peer.activity}</PeerActivity>
+              </PeerSummary>
+            </PeerListItem>)}
+          </PeerList>
+        </Content>
       </Screen>}
     />;
   }

@@ -51,6 +51,8 @@ const StyledForm = styled.form`
   display: flex;
   flex: 1;
   flex-direction: column;
+  font: ${theme('typeface', 'normal')};
+  margin: ${theme('space', 'large')} 0;
 `;
 
 const Content = styled.div`
@@ -58,6 +60,7 @@ const Content = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
+  padding: 0 ${theme('space', 'large')};
 `;
 
 class Form extends React.Component {

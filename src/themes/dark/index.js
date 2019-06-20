@@ -25,9 +25,11 @@ const createDarkTheme = () => ({
   },
   shadow: {
     high: 'rgba(0, 0, 0, 0.35)',
+    higher: 'rgba(0, 0, 0, 0.5)',
     low: 'rgba(0, 0, 0, 0.1)',
     medium: 'rgba(0, 0, 0, 0.25)',
-    off: 'rgba(0, 0, 0, 0)'
+    off: 'rgba(0, 0, 0, 0)',
+    ultra: 'rgba(0, 0, 0, 0.75)'
   },
   space: {
     huge: '32px',

@@ -2,22 +2,21 @@ import styled from 'styled-components';
 import theme from '/utilities/styled/theme';
 
 const Screen = styled.div`
-  align-items: center;
+  align-items: stretch;
   background-color: ${theme('color', 'primary', 'background')};
   background: ${theme('gradient', 'screen')};
-  border-radius: 4px;
-  box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
+  border-radius: ${theme('space', 'small')};
+  box-shadow: ${theme('space', 'tiny')} ${theme('space', 'tiny')} 1px ${theme('shadow', 'higher')};
   color: ${theme('color', 'primary', 'foreground')};
   display: flex;
   flex: 1;
   flex-direction: column;
-  font: ${theme('typeface', 'normal')};
-  height: 80%;
-  overflow: hidden;
-  margin: 32px auto;
-  padding: ${theme('space', 'large')};
+  margin: ${theme('space', 'huge')} auto;
   max-width: 80%;
   min-width: 28%;
+  overflow: hidden;
+
+  ${({ theme }) => theme.transition('min-width')}
 `;
 
 export default Screen;
