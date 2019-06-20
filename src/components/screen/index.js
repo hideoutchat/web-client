@@ -16,7 +16,8 @@ const Screen = styled.div`
   overflow: hidden;
   margin: 32px auto;
   padding: ${theme('space', 'large')};
-  width: 80%;
+  max-width: 80%;
+  min-width: 28%;
 `;
 
 export default Screen;

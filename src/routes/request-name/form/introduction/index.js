@@ -1,4 +1,5 @@
 import styled, { keyframes } from 'styled-components';
+import theme from '/utilities/styled/theme';
 
 const FadeIn = keyframes`
   from {
@@ -13,11 +14,13 @@ const FadeIn = keyframes`
 const Introduction = styled.div`
   animation-duration: 1s;
   animation-name: ${FadeIn};
-  margin-bottom: ${(props) => props.theme.space.huge};
-  text-align: center;
+  background-color: ${theme('highlight', 'low')};
+  border-radius: ${theme('space', 'normal')};
+  margin-bottom: ${theme('space', 'huge')};
+  padding: ${theme('space', 'normal')};
 
   p {
-    margin: 0 0 ${(props) => props.theme.space.normal};
+    margin: ${theme('space', 'normal')} 0;
     padding: 0;
   }
 `;

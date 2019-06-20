@@ -9,6 +9,7 @@ import Screen from '/components/screen';
 
 import { connect } from 'react-redux';
 import joinNetwork from '/redux/actions/join-network';
+import theme from '/utilities/styled/theme';
 
 const Door = styled.div`
   cursor: pointer;
@@ -37,6 +38,9 @@ const FadeIn = keyframes`
 const Message = styled.div`
   animation-duration: 1s;
   animation-name: ${FadeIn};
+  background-color: ${theme('highlight', 'low')};
+  border-radius: ${theme('space', 'normal')};
+  padding: ${theme('space', 'normal')};
 `;
 
 const { func, string } = PropTypes;
