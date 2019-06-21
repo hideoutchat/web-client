@@ -90,6 +90,11 @@ const Introduction = styled.div`
   text-align: center;
 `;
 
+const Welcome = styled.div`
+  font: ${theme('typeface', 'code')};
+  opacity: 0.1;
+`;
+
 class NetworkRoute extends React.Component {
   static get propTypes() {
     const { arrayOf, func, shape, string } = PropTypes;
@@ -135,6 +140,7 @@ class NetworkRoute extends React.Component {
       whenTrue={() => <Screen>
         <Header>
           <Logo/>
+          <Welcome>SElERU9VVA</Welcome>
           <Introduction>
             <p><b style={{ color: '#3090f0' }}>427</b> other people are here.</p>
             <p>Looking for someone in particular?</p>

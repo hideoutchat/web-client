@@ -44,6 +44,7 @@ const createDarkTheme = () => ({
     transition-timing-function: ease-in-out;
   `,
   typeface: {
+    code: '400 14px Lucida Console, Roboto Mono, monospace',
     normal: '400 14px PT Sans, Helvetica, sans-serif',
     paragraph: '400 14px PT Sans, Helvetica, sans-serif',
     title: '400 14px Oswald, Helvetica, sans-serif'

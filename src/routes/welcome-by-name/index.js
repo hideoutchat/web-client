@@ -36,10 +36,13 @@ const FadeIn = keyframes`
 `;
 
 const Message = styled.div`
+  align-items: stretch;
   animation-duration: 1s;
   animation-name: ${FadeIn};
   background-color: ${theme('highlight', 'low')};
   border-radius: ${theme('space', 'normal')};
+  display: flex;
+  flex-direction: column;
   padding: ${theme('space', 'normal')};
 `;
 
@@ -47,6 +50,7 @@ const Header = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
+  padding: 0 ${theme('space', 'large')};
 `;
 
 const Content = styled.div`
@@ -58,6 +62,11 @@ const Content = styled.div`
   padding: ${theme('space', 'large')};
 `;
 
+const Welcome = styled.div`
+  font: ${theme('typeface', 'code')};
+  opacity: 0.1;
+`;
+
 const { func, string } = PropTypes;
 
 const WelcomeByNameRoute = ({ name, onCommit }) => <Fork
@@ -66,6 +75,10 @@ const WelcomeByNameRoute = ({ name, onCommit }) => <Fork
   whenTrue={() => <Screen>
     <Header>
       <Logo/>
+      <Welcome>
+        <div>01001000 01001001 01000100 01000101</div>
+        <div>01001111 01010101 01010100</div>
+      </Welcome>
     </Header>
     <Content>
       <Message>
