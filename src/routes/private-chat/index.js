@@ -174,8 +174,8 @@ const PrivateChatRoute = ({ history }) => <Screen style={{ minWidth: '80%' }}>
         <ActionBarSubtitle>A private conversation</ActionBarSubtitle>
       </Title>
       <Actions>
-        <MenuIcon title="Groups">
-          <UserGroupIcon onClick={() => history.push('#!/dialogs/groups')}/>
+        <MenuIcon onClick={() => history.push('#!/dialogs/groups')} title="Groups">
+          <UserGroupIcon/>
         </MenuIcon>
         <Menu>
           <MenuItem>Leave chat...</MenuItem>
