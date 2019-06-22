@@ -7,7 +7,7 @@
     "coverage": "nyc report",
     "documentation": "rm -fR docs; find src -type f -name index.js | xargs jsdoc --destination ./docs --package ./package.json --readme ./README.md",
     "lint": "eslint src",
-    "start": "parcel serve --no-autoinstall --no-hmr --https --out-dir lib src/index.html",
+    "start": "parcel serve --no-autoinstall --no-hmr --https --port 7040 --host localhost --out-dir lib src/index.html",
     "test": "NODE_ENV=test nyc --silent --check-coverage --lines 100 --per-file mocha --require @babel/register src/spec.setup.js src/**/spec.js"
   },
   "dependencies": {

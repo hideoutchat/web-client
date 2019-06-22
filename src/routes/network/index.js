@@ -168,8 +168,8 @@ class NetworkRoute extends React.Component {
 export { NetworkRoute };
 
 export default connect((state) => ({
-  name: state.name,
-  peers: state.peers
+  name: state.self.displayName,
+  peers: Object.keys(state.peers.byId).map((id) => state.peers.byId[id])
 }), (dispatch, props) => ({
   onPeerSelect: (peer) => dispatch(visitPeer({ history: props.history, peer }))
 }))(NetworkRoute);

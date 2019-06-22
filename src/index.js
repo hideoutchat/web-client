@@ -8,34 +8,53 @@ import { render } from 'react-dom';
 
 const createApp = () => {
   const Redux = createRedux({
-    name: '',
-    peers: [
-      {
-        activity: 'Last seen a few minutes ago',
-        id: 'X9gaLhQnvh7nfKovSsa+nWpl1E3JAfBpkzPft+bwbl37',
-        name: 'degenerate porcupine'
-      },
-      {
-        activity: 'Last seen a moment ago',
-        id: 'FhVgu1sGp6AeC4xt54/r9GS06FuKzRJsLBjLBHAzFI0f',
-        name: 'vile minion'
-      },
-      {
-        activity: 'Last seen an hour ago',
-        id: 'ryXx9Pv8hFeOa/OlYIed9I0QEIDvEL+sLsm0tDJs66+r',
-        name: 'Felix'
-      },
-      {
-        activity: 'Last seen a moment ago',
-        id: 'S/NH8maAA51ypFTXt/0W4xOfZUtHaTBoORqJVALHvOZP',
-        name: 'dracula turpentine'
-      },
-      {
-        activity: 'Last seen 2 hours ago',
-        id: 'se5nURm9yFJaJECBOFwWQW0yA62ZMvdNvWXvGyrtNr6Z',
-        name: 'Gary Florence'
+    messages: {
+      byPeer: {
+        'FhVgu1sGp6AeC4xt54/r9GS06FuKzRJsLBjLBHAzFI0f': [],
+        'S/NH8maAA51ypFTXt/0W4xOfZUtHaTBoORqJVALHvOZP': [],
+        'X9gaLhQnvh7nfKovSsa+nWpl1E3JAfBpkzPft+bwbl37': [],
+        'ryXx9Pv8hFeOa/OlYIed9I0QEIDvEL+sLsm0tDJs66+r': [],
+        se5nURm9yFJaJECBOFwWQW0yA62ZMvdNvWXvGyrtNr6Z: []
       }
-    ]
+    },
+    peers: {
+      byId: [
+        {
+          activity: 'Last seen a few minutes ago',
+          id: 'X9gaLhQnvh7nfKovSsa+nWpl1E3JAfBpkzPft+bwbl37',
+          name: 'degenerate porcupine'
+        },
+        {
+          activity: 'Last seen a moment ago',
+          id: 'FhVgu1sGp6AeC4xt54/r9GS06FuKzRJsLBjLBHAzFI0f',
+          name: 'vile minion'
+        },
+        {
+          activity: 'Last seen an hour ago',
+          id: 'ryXx9Pv8hFeOa/OlYIed9I0QEIDvEL+sLsm0tDJs66+r',
+          name: 'Felix'
+        },
+        {
+          activity: 'Last seen a moment ago',
+          id: 'S/NH8maAA51ypFTXt/0W4xOfZUtHaTBoORqJVALHvOZP',
+          name: 'dracula turpentine'
+        },
+        {
+          activity: 'Last seen 2 hours ago',
+          id: 'se5nURm9yFJaJECBOFwWQW0yA62ZMvdNvWXvGyrtNr6Z',
+          name: 'Gary Florence'
+        }
+      ].reduce((byId, peer) => ({
+        ...byId,
+        [peer.id]: peer
+      }), {})
+    },
+    self: {
+      color: '#305090',
+      displayName: '',
+      id: 'me',
+      isTrusted: true
+    }
   });
   const Routes = createRoutes();
   const theme = createTheme();
