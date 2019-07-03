@@ -38,6 +38,7 @@ const createActionReducers = () => ({
     reactions: [
       ...state.reactions,
       {
+        emoji: action.emoji,
         messageId: action.messageId,
         peerId: action.peerId,
         reactorId: action.reactorId
@@ -128,7 +129,7 @@ const createActionReducers = () => ({
         })
       }
     },
-    reactions: state.reactions.filter((it) => !(it.peerId === action.peerId && it.messageId === action.messageId && it.reactorId === action.reactorId))
+    reactions: state.reactions.filter((it) => !(it.peerId === action.peerId && it.messageId === action.messageId && it.reactorId === action.reactorId && it.emoji === action.emoji))
   })
 });
 
