@@ -1,8 +1,10 @@
+import EmojiDialog from '/dialogs/emoji-dialog';
 import GroupsDialog from '/dialogs/groups-dialog';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 const Dialogs = {
+  emoji: EmojiDialog,
   groups: GroupsDialog
 };
 

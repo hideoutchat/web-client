@@ -13,9 +13,14 @@ import Screen from '/components/screen';
 import UserGroupIcon from '/components/user-group-icon';
 
 import { connect } from 'react-redux';
+import editMessage from '/redux/actions/edit-message';
+import leaveChat from '/redux/actions/leave-chat';
+import removeMessage from '/redux/actions/remove-message';
+import selectMessageReaction from '/redux/actions/select-message-reaction';
 import sendMessage from '/redux/actions/send-message';
 import styled from 'styled-components';
 import theme from '/utilities/styled/theme';
+import toggleMessageReaction from '/redux/actions/toggle-message-reaction';
 import whenProp from '/utilities/styled/when-prop';
 
 const Children = styled.div`
@@ -124,20 +129,22 @@ const ActionBarIcon = styled.div`
 const BACK = -1;
 const goBack = (history) => () => history.go(BACK);
 
-const PrivateChatRoute = ({ history, messages, onMessageSend, peer, self }) => <Screen style={{ minWidth: '80%' }}>
+const PrivateChatRoute = ({ history, messages, onLeave, onMessageEdit, onMessageReactionSelect, onMessageReactionToggle, onMessageRemove, onMessageSend, peer, self }) => <Screen style={{ minWidth: '80%' }}>
   <Panel
     content={<Children>
-      <MessageList count={2}>
+      <MessageList count={messages.length}>
         <Prologue>This is the beginning of your conversation with {peer.name}.</Prologue>
         {messages.map((it) => <MessageListItem
           actions={<Menu>
-            <MenuItem>Add reaction...</MenuItem>
-            <MenuItem>Edit...</MenuItem>
-            <MenuItem>Delete...</MenuItem>
+            <MenuItem onClick={() => onMessageReactionSelect(it)}>Add reaction...</MenuItem>
+            <MenuItem onClick={() => onMessageEdit(it)}>Edit...</MenuItem>
+            <MenuItem onClick={() => onMessageRemove(it)}>Delete...</MenuItem>
           </Menu>}
           isOutbound
           key={it.id}
           lines={it.lines}
+          onReactionSelect={() => onMessageReactionSelect(it)}
+          onReactionToggle={(emoji) => onMessageReactionToggle({ emoji, message: it })}
           onSelect={() => true}
           reactions={it.reactions}
           sender={it.sender}
@@ -163,7 +170,7 @@ const PrivateChatRoute = ({ history, messages, onMessageSend, peer, self }) => <
           <UserGroupIcon/>
         </MenuIcon>
         <Menu>
-          <MenuItem>Leave chat...</MenuItem>
+          <MenuItem onClick={onLeave}>Leave chat...</MenuItem>
         </Menu>
       </Actions>
     </Header>}
@@ -198,6 +205,11 @@ PrivateChatRoute.propTypes = {
       isTrusted: bool.isRequired
     }).isRequired
   })).isRequired,
+  onLeave: func.isRequired,
+  onMessageEdit: func.isRequired,
+  onMessageReactionSelect: func.isRequired,
+  onMessageReactionToggle: func.isRequired,
+  onMessageRemove: func.isRequired,
   onMessageSend: func.isRequired,
   peer: shape({
     activity: string.isRequired,
@@ -216,6 +228,28 @@ export default connect((state, props) => ({
   peer: state.peers.byId[decodeURIComponent(props.match.params.id)],
   self: state.self
 }), (dispatch, props) => ({
+  onLeave: () => dispatch(leaveChat({
+    history: props.history,
+    peerId: decodeURIComponent(props.match.params.id)
+  })),
+  onMessageEdit: (message) => dispatch(editMessage({
+    message,
+    peerId: decodeURIComponent(props.match.params.id)
+  })),
+  onMessageReactionSelect: (message) => dispatch(selectMessageReaction({
+    history: props.history,
+    messageId: message.id,
+    peerId: decodeURIComponent(props.match.params.id)
+  })),
+  onMessageReactionToggle: ({ emoji, message }) => dispatch(toggleMessageReaction({
+    emoji,
+    messageId: message.id,
+    peerId: decodeURIComponent(props.match.params.id)
+  })),
+  onMessageRemove: (message) => dispatch(removeMessage({
+    message,
+    peerId: decodeURIComponent(props.match.params.id)
+  })),
   onMessageSend: (message) => dispatch(sendMessage({
     message,
     peerId: decodeURIComponent(props.match.params.id)

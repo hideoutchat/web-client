@@ -61,16 +61,17 @@ const StyledReactionListItem = styled.div`
   }
 `;
 
-const ReactionListItem = ({ count, emoji }) => <StyledReactionListItem>
+const ReactionListItem = ({ count, emoji, onClick }) => <StyledReactionListItem onClick={onClick}>
   <Emoji>{emoji}</Emoji>
   <Count>{count}</Count>
 </StyledReactionListItem>;
 
-const { number, string } = PropTypes;
+const { func, number, string } = PropTypes;
 
 ReactionListItem.propTypes = {
   count: number.isRequired,
-  emoji: string.isRequired
+  emoji: string.isRequired,
+  onClick: func.isRequired
 };
 
 export default ReactionListItem;

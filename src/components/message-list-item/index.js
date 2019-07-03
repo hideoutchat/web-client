@@ -18,7 +18,7 @@ import Time from './time';
 
 const timeFormat = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric' });
 
-const MessageListItem = ({ actions, isOutbound, lines, onSelect, reactions, sender }) => <Message isOutbound={isOutbound} onLongPress={onSelect}>
+const MessageListItem = ({ actions, isOutbound, lines, onReactionSelect, onReactionToggle, onSelect, reactions, sender }) => <Message isOutbound={isOutbound} onLongPress={onSelect}>
   {actions && <ActionList>{actions}</ActionList>}
   <Line>
     <Gutter>
@@ -47,8 +47,8 @@ const MessageListItem = ({ actions, isOutbound, lines, onSelect, reactions, send
     </Content>
   </Line>)}
   <ReactionList>
-    {reactions.map((it) => <ReactionListItem key={it.emoji} count={it.count} emoji={it.emoji}/>)}
-    {reactions.length > 0 && <AddReaction onReact={() => true}/>}
+    {reactions.map((it) => <ReactionListItem key={it.emoji} count={it.count} emoji={it.emoji} onClick={() => onReactionToggle(it.emoji)}/>)}
+    {reactions.length > 0 && <AddReaction onReact={onReactionSelect}/>}
   </ReactionList>
 </Message>;
 
@@ -61,6 +61,8 @@ MessageListItem.propTypes = {
     text: string.isRequired,
     timestamp: string.isRequired
   })).isRequired,
+  onReactionSelect: func.isRequired,
+  onReactionToggle: func.isRequired,
   onSelect: func.isRequired,
   reactions: arrayOf(shape({
     count: number.isRequired,

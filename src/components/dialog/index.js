@@ -16,22 +16,22 @@ const Dialog = ({ commitLabel, content, onCancel, onCommit, title }) => <Overlay
       <Title>{title}</Title>
     </Header>
     <Content>{content}</Content>
-    <Footer>
+    {onCommit && <Footer>
       <Actions>
         <PrimaryAction onClick={onCommit}>{commitLabel}</PrimaryAction>
         <Action onClick={onCancel}>Cancel</Action>
       </Actions>
-    </Footer>
+    </Footer>}
   </Frame>
 </Overlay>;
 
 const { func, node } = PropTypes;
 
 Dialog.propTypes = {
-  commitLabel: node.isRequired,
+  commitLabel: node,
   content: node.isRequired,
   onCancel: func.isRequired,
-  onCommit: func.isRequired,
+  onCommit: func,
   title: node.isRequired
 };
 

@@ -49,6 +49,7 @@ const createApp = () => {
         [peer.id]: peer
       }), {})
     },
+    reactions: [],
     self: {
       color: '#305090',
       displayName: '',
