@@ -14,7 +14,7 @@ const Form = styled.form`
   flex: 1;
   flex-direction: row;
   margin: 0;
-  padding: 0 8px;
+  padding: 0 ${theme('space', 'normal')};
   position: relative;
 `;
 
@@ -31,7 +31,7 @@ const Text = styled.input`
   margin: 0;
   opacity: 1;
   outline: none;
-  padding: 0 8px 0 0;
+  padding: 0 ${theme('space', 'normal')} 0 0;
   transition-duration: 100ms;
   transition-property: background-color, opacity;
   transition-timing-function: ease-in-out;
