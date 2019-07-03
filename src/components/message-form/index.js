@@ -13,9 +13,8 @@ const Form = styled.form`
   display: flex;
   flex: 1;
   flex-direction: row;
-  height: 36px;
   margin: 0;
-  padding: 8px;
+  padding: 0 8px;
   position: relative;
 `;
 
@@ -28,11 +27,11 @@ const Text = styled.input`
   color: inherit;
   flex: 1;
   font: ${theme('typeface', 'paragraph')};
-  line-height: 2em;
+  line-height: 48px;
   margin: 0;
   opacity: 1;
   outline: none;
-  padding: 0;
+  padding: 0 8px 0 0;
   transition-duration: 100ms;
   transition-property: background-color, opacity;
   transition-timing-function: ease-in-out;
