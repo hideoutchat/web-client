@@ -166,7 +166,7 @@ const PrivateChatRoute = ({ history, messages, onLeave, onMessageEdit, onMessage
         <ActionBarSubtitle>A private conversation</ActionBarSubtitle>
       </Title>
       <Actions>
-        <MenuIcon onClick={() => history.push('#!/dialogs/groups')} title="Groups">
+        <MenuIcon onClick={() => history.push('#!/dialogs/groups', { peerId: peer.id })} title="Groups">
           <UserGroupIcon/>
         </MenuIcon>
         <Menu>

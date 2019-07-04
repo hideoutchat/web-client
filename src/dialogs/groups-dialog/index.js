@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextInput from '/components/text-input';
 
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import theme from '/utilities/styled/theme';
 
@@ -35,13 +36,13 @@ const UsersPickerSearch = styled(TextInput)`
   width: auto;
 `;
 
-const GroupsDialog = ({ history }) => <Dialog
+const GroupsDialog = ({ history, peer }) => <Dialog
   commitLabel="Create"
   content={<Content>
     <Introduction>Start a new conversation with...</Introduction>
     <UsersPicker>
       <UsersPickerChoice>You</UsersPickerChoice>
-      <UsersPickerChoice>fleeting spineherd</UsersPickerChoice>
+      <UsersPickerChoice>{peer.name}</UsersPickerChoice>
     </UsersPicker>
     <UsersPickerSearch isAutoFocus placeholder="Invite others..."/>
   </Content>}
@@ -50,11 +51,24 @@ const GroupsDialog = ({ history }) => <Dialog
   title="Create a group"
 />;
 
-const { func, shape } = PropTypes;
+const { func, shape, string } = PropTypes;
 
 GroupsDialog.propTypes = {
   history: shape({ goBack: func.isRequired }).isRequired,
-  onCommit: func.isRequired
+  location: shape({
+    state: shape({
+      peerId: string.isRequired
+    }).isRequired
+  }).isRequired,
+  onCommit: func.isRequired,
+  peer: shape({
+    name: string.isRequired
+  }).isRequired
 };
 
-export default GroupsDialog;
+export { GroupsDialog };
+
+export default connect((state, props) => ({
+  peer: state.peers.byId[props.location.state.peerId]
+}), () => ({
+}))(GroupsDialog);
