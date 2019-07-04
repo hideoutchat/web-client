@@ -1,4 +1,5 @@
-const editMessage = ({ message, peerId }) => (dispatch, getState) => {
+const editMessage = () => () => {
+  // TODO: Implement this.
 };
 
 export default editMessage;
