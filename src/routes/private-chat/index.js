@@ -14,6 +14,7 @@ import UserGroupIcon from '/components/user-group-icon';
 
 import { connect } from 'react-redux';
 import editMessage from '/redux/actions/edit-message';
+import groupMessages from './group-messages';
 import leaveChat from '/redux/actions/leave-chat';
 import removeMessage from '/redux/actions/remove-message';
 import selectMessageReaction from '/redux/actions/select-message-reaction';
@@ -21,7 +22,6 @@ import sendMessage from '/redux/actions/send-message';
 import styled from 'styled-components';
 import theme from '/utilities/styled/theme';
 import toggleMessageReaction from '/redux/actions/toggle-message-reaction';
-import whenProp from '/utilities/styled/when-prop';
 
 const Children = styled.div`
   align-items: stretch;
@@ -65,7 +65,7 @@ const Icon = styled.div`
   font-size: 14px;
   height: 32px;
   line-height: 34px;
-  margin-left: ${whenProp('isShifted')('-40px', '0')};
+  margin-left: -${theme('space', 'normal')};
   position: relative;
   text-align: center;
   transition-duration: 100ms;
@@ -126,14 +126,24 @@ const ActionBarIcon = styled.div`
   font-size: 32px;
 `;
 
+const Shine = styled.div`
+  background-color: ${theme('color', 'badge', 'background')};
+  border-radius: 50%;
+  height: ${theme('space', 'normal')};
+  position: absolute;
+  right: ${theme('space', 'small')};
+  top: ${theme('space', 'small')};
+  width: ${theme('space', 'normal')};
+`;
+
 const BACK = -1;
 const goBack = (history) => () => history.go(BACK);
 
-const PrivateChatRoute = ({ history, messages, onLeave, onMessageEdit, onMessageReactionSelect, onMessageReactionToggle, onMessageRemove, onMessageSend, peer, self }) => <Screen style={{ minWidth: '80%' }}>
+const PrivateChatRoute = ({ history, isDistracting, messages, onLeave, onMessageEdit, onMessageReactionSelect, onMessageReactionToggle, onMessageRemove, onMessageSend, topic }) => <Screen style={{ minWidth: '80%' }}>
   <Panel
     content={<Children>
       <MessageList count={messages.length}>
-        <Prologue>This is the beginning of your conversation with {peer.name}.</Prologue>
+        <Prologue>This is the beginning of your conversation in <b>{topic.attributes.displayName}</b>.</Prologue>
         {messages.map((it) => <MessageListItem
           actions={<Menu>
             <MenuItem onClick={() => onMessageReactionSelect(it)}>Add reaction...</MenuItem>
@@ -157,16 +167,17 @@ const PrivateChatRoute = ({ history, messages, onLeave, onMessageEdit, onMessage
     header={<Header>
       <Icon onClick={goBack(history)}>
         <Hamburger/>
+        {isDistracting && <Shine/>}
       </Icon>
       <ActionBarIcon>
-        <Hashatar code={peer.id}/>
+        <Hashatar code={topic.id}/>
       </ActionBarIcon>
       <Title>
-        <ActionBarTitle>{peer.name} &amp; {self.displayName}</ActionBarTitle>
+        <ActionBarTitle>{topic.attributes.displayName}</ActionBarTitle>
         <ActionBarSubtitle>A private conversation</ActionBarSubtitle>
       </Title>
       <Actions>
-        <MenuIcon onClick={() => history.push('#!/dialogs/groups', { peerId: peer.id })} title="Groups">
+        <MenuIcon onClick={() => history.push('#!/dialogs/groups', { topicId: topic.id })} title="Groups">
           <UserGroupIcon/>
         </MenuIcon>
         <Menu>
@@ -183,6 +194,7 @@ PrivateChatRoute.propTypes = {
   history: shape({
     go: func.isRequired
   }).isRequired,
+  isDistracting: bool.isRequired,
   match: shape({
     params: shape({
       id: string.isRequired
@@ -199,10 +211,12 @@ PrivateChatRoute.propTypes = {
       emoji: string.isRequired
     })).isRequired,
     sender: shape({
-      color: string,
-      displayName: string.isRequired,
-      id: string.isRequired,
-      isTrusted: bool.isRequired
+      attributes: shape({
+        color: string,
+        displayName: string.isRequired,
+        isTrusted: bool.isRequired
+      }).isRequired,
+      id: string.isRequired
     }).isRequired
   })).isRequired,
   onLeave: func.isRequired,
@@ -211,47 +225,35 @@ PrivateChatRoute.propTypes = {
   onMessageReactionToggle: func.isRequired,
   onMessageRemove: func.isRequired,
   onMessageSend: func.isRequired,
-  peer: shape({
-    activity: string.isRequired,
-    id: string.isRequired,
-    name: string.isRequired
-  }).isRequired,
-  self: shape({
-    displayName: string.isRequired
+  topic: shape({
+    attributes: shape({
+      displayName: string.isRequired
+    }).isRequired,
+    id: string.isRequired
   }).isRequired
 };
 
 export { PrivateChatRoute };
 
-export default connect((state, props) => ({
-  messages: state.messages.byPeer[decodeURIComponent(props.match.params.id)],
-  peer: state.peers.byId[decodeURIComponent(props.match.params.id)],
-  self: state.self
-}), (dispatch, props) => ({
-  onLeave: () => dispatch(leaveChat({
-    history: props.history,
-    peerId: decodeURIComponent(props.match.params.id)
-  })),
-  onMessageEdit: (message) => dispatch(editMessage({
-    message,
-    peerId: decodeURIComponent(props.match.params.id)
-  })),
-  onMessageReactionSelect: (message) => dispatch(selectMessageReaction({
-    history: props.history,
-    messageId: message.id,
-    peerId: decodeURIComponent(props.match.params.id)
-  })),
-  onMessageReactionToggle: ({ emoji, message }) => dispatch(toggleMessageReaction({
-    emoji,
-    messageId: message.id,
-    peerId: decodeURIComponent(props.match.params.id)
-  })),
-  onMessageRemove: (message) => dispatch(removeMessage({
-    message,
-    peerId: decodeURIComponent(props.match.params.id)
-  })),
-  onMessageSend: (message) => dispatch(sendMessage({
-    message,
-    peerId: decodeURIComponent(props.match.params.id)
+const mapStateToProps = (state, props) => ({
+  isDistracting: (state.indexes.resources.by.type.message || []).some((it) => it.relationships.topic.id !== decodeURIComponent(props.match.params.id)),
+  messages: groupMessages(state, { id: decodeURIComponent(props.match.params.id) }),
+  topic: state.indexes.resources.by.id[decodeURIComponent(props.match.params.id)][0]
+});
+
+const mapDispatchToProps = (dispatch, { history, match }) => ({
+  onLeave: () => dispatch(leaveChat({ history })),
+  onMessageEdit: (message) => dispatch(editMessage({ message })),
+  onMessageReactionSelect: (message) => dispatch(selectMessageReaction({ history, message })),
+  onMessageReactionToggle: ({ emoji, message }) => dispatch(toggleMessageReaction({ emoji, message })),
+  onMessageRemove: (message) => dispatch(removeMessage({ message })),
+  onMessageSend: ({ text }) => dispatch(sendMessage({
+    text,
+    topic: {
+      id: decodeURIComponent(match.params.id),
+      type: 'topic'
+    }
   }))
-}))(PrivateChatRoute);
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PrivateChatRoute);

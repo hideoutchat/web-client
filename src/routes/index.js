@@ -12,7 +12,7 @@ const createRoutes = () => {
     <Route component={RequestNameRoute} exact path="/"/>
     <Route component={WelcomeByNameRoute} exact path="/welcome"/>
     <Route component={NetworkRoute} exact path="/network"/>
-    <Route component={PrivateChatRoute} exact path="/peers/:id"/>
+    <Route component={PrivateChatRoute} exact path="/topics/:id"/>
     <Route component={DialogRoute} path="/"/>
   </Router>;
 

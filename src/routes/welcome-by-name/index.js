@@ -97,8 +97,12 @@ WelcomeByNameRoute.propTypes = {
 
 export { WelcomeByNameRoute };
 
-export default connect((state) => ({
-  name: state.self.displayName
-}), (dispatch, props) => ({
+const mapStateToProps = (state) => ({
+  name: state.indexes.resources.by.id[state.indexes.resources.by.type.self[0].relationships.member.id][0].attributes.displayName
+});
+
+const mapDispatchToProps = (dispatch, props) => ({
   onCommit: () => dispatch(joinNetwork({ history: props.history }))
-}))(WelcomeByNameRoute);
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(WelcomeByNameRoute);

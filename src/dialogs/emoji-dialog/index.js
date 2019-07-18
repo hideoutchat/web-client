@@ -48,8 +48,7 @@ class EmojiDialog extends React.Component {
       }).isRequired,
       location: shape({
         state: shape({
-          messageId: string.isRequired,
-          peerId: string.isRequired
+          messageId: string.isRequired
         }).isRequired
       }).isRequired,
       onCancel: func.isRequired,
@@ -80,8 +79,9 @@ export default connect(null, (dispatch, props) => ({
   onCommit: ({ emoji }) => {
     dispatch(addMessageReaction({
       emoji,
-      messageId: props.location.state.messageId,
-      peerId: props.location.state.peerId
+      message: {
+        id: props.location.state.messageId
+      }
     }));
     props.history.goBack();
   }

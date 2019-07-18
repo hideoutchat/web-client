@@ -36,6 +36,10 @@ RequestNameRoute.propTypes = {
 
 export { RequestNameRoute };
 
-export default connect(null, (dispatch, props) => ({
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = (dispatch, props) => ({
   onCommit: ({ name }) => dispatch(setName({ history: props.history, name }))
-}))(RequestNameRoute);
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RequestNameRoute);

@@ -6,6 +6,10 @@ const createDarkTheme = () => ({
       borderInactive: '#505050',
       foreground: '#ffffff'
     },
+    badge: {
+      background: '#dd330f',
+      foreground: '#ffffff'
+    },
     primary: {
       background: '#221f27',
       bold: '#ffffff',

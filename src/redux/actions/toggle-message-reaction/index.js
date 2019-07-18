@@ -1,10 +1,25 @@
-const toggleMessageReaction = ({ emoji, messageId, peerId }) => (dispatch, getState) => {
-  const { reactions, self } = getState();
+const toggleMessageReaction = ({ emoji, message }) => (dispatch, getState) => {
+  const {
+    indexes: {
+      resources: {
+        by: {
+          type: {
+            reaction: reactions,
+            self: [{
+              relationships: {
+                member: self
+              }
+            }]
+          }
+        }
+      }
+    }
+  } = getState();
 
-  if (reactions.some((it) => it.messageId === messageId && it.peerId === peerId && it.reactorId === self.id)) {
-    dispatch({ emoji, messageId, peerId, reactorId: self.id, type: 'REMOVE_MESSAGE_REACTION' });
+  if (reactions.some((it) => it.relationships.message.id === message.id && it.relationships.reactor.id === self.id)) {
+    dispatch({ emoji, message, reactor: self, type: 'DESTROY_RESOURCE' });
   } else {
-    dispatch({ emoji, messageId, peerId, reactorId: self.id, type: 'ADD_MESSAGE_REACTION' });
+    dispatch({ emoji, message, reactor: self, type: 'CREATE_RESOURCE' });
   }
 };
 

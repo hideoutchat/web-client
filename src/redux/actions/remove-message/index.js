@@ -1,5 +1,5 @@
-const removeMessage = ({ message, peerId }) => (dispatch) => {
-  dispatch({ messageId: message.id, peerId, type: 'REMOVE_MESSAGE' });
+const removeMessage = ({ message }) => (dispatch) => {
+  dispatch({ message, type: 'REMOVE_MESSAGE' });
 };
 
 export default removeMessage;

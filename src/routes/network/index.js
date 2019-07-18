@@ -97,16 +97,19 @@ const Welcome = styled.div`
 
 class NetworkRoute extends React.Component {
   static get propTypes() {
-    const { arrayOf, func, shape, string } = PropTypes;
+    const { arrayOf, func, number, shape, string } = PropTypes;
+    const memberShape = {
+      attributes: shape({
+        displayName: string.isRequired
+      }).isRequired,
+      id: string.isRequired
+    };
 
     return {
-      name: string,
       onPeerSelect: func.isRequired,
-      peers: arrayOf(shape({
-        activity: string.isRequired,
-        id: string.isRequired,
-        name: string.isRequired
-      })).isRequired
+      peerCount: number.isRequired,
+      peers: arrayOf(shape(memberShape)).isRequired,
+      self: shape(memberShape).isRequired
     };
   }
 
@@ -123,7 +126,7 @@ class NetworkRoute extends React.Component {
     const normalizedFilter = peerNameFilter.toLowerCase();
 
     this.setState({
-      filteredPeers: peers.filter((it) => it.name.toLowerCase().includes(normalizedFilter)),
+      filteredPeers: peers.filter((it) => it.attributes.displayName.toLowerCase().includes(normalizedFilter)),
       peerNameFilter
     });
   };
@@ -131,18 +134,18 @@ class NetworkRoute extends React.Component {
   render() {
     const {
       handlePeerNameFilterChange,
-      props: { name, onPeerSelect },
+      props: { onPeerSelect, peerCount, self },
       state: { filteredPeers, peerNameFilter }
     } = this;
     return <Fork
-      condition={Boolean(name)}
+      condition={Boolean(self.attributes.displayName)}
       whenFalse={() => <Redirect to="/"/>}
       whenTrue={() => <Screen>
         <Header>
           <Logo/>
           <Welcome>SElERU9VVA</Welcome>
           <Introduction>
-            <p><b style={{ color: '#3090f0' }}>427</b> other people are here.</p>
+            <p><b style={{ color: '#3090f0' }}>{peerCount}</b> other {peerCount === 1 ? 'person is' : 'people are'} here.</p>
             <p>Looking for someone in particular?</p>
             <TextInput isAutoFocus onChange={handlePeerNameFilterChange} value={peerNameFilter}/>
           </Introduction>
@@ -154,8 +157,8 @@ class NetworkRoute extends React.Component {
                 <Hashatar code={peer.id}/>
               </PeerAvatar>
               <PeerSummary>
-                <PeerName>{peer.name}</PeerName>
-                <PeerActivity>{peer.activity}</PeerActivity>
+                <PeerName>{peer.attributes.displayName}</PeerName>
+                <PeerActivity>{peer.id}</PeerActivity>
               </PeerSummary>
             </PeerListItem>)}
           </PeerList>
@@ -167,9 +170,14 @@ class NetworkRoute extends React.Component {
 
 export { NetworkRoute };
 
-export default connect((state) => ({
-  name: state.self.displayName,
-  peers: Object.keys(state.peers.byId).map((id) => state.peers.byId[id])
-}), (dispatch, props) => ({
+const mapStateToProps = (state) => ({
+  peerCount: state.indexes.resources.by.type.member.length - 1,
+  peers: state.indexes.resources.by.type.member.filter((it) => state.indexes.resources.by.type.self[0].relationships.member.id !== it.id),
+  self: state.indexes.resources.by.id[state.indexes.resources.by.type.self[0].relationships.member.id][0]
+});
+
+const mapDispatchToProps = (dispatch, props) => ({
   onPeerSelect: (peer) => dispatch(visitPeer({ history: props.history, peer }))
-}))(NetworkRoute);
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NetworkRoute);

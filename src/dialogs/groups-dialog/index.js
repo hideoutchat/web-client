@@ -69,6 +69,6 @@ GroupsDialog.propTypes = {
 export { GroupsDialog };
 
 export default connect((state, props) => ({
-  peer: state.peers.byId[props.location.state.peerId]
+  peer: state.indexes.peers.byId[props.location.state.peerId]
 }), () => ({
 }))(GroupsDialog);

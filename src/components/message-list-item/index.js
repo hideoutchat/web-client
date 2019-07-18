@@ -22,17 +22,17 @@ const MessageListItem = ({ actions, isOutbound, lines, onReactionSelect, onReact
   {actions && <ActionList>{actions}</ActionList>}
   <Line>
     <Gutter>
-      <Avatar style={{ borderColor: sender.color }}>
+      <Avatar style={{ borderColor: sender.attributes.color }}>
         <Hashatar code={sender.id}/>
       </Avatar>
     </Gutter>
     <Content>
       <Header>
-        <Sender>{sender.displayName}</Sender>
+        <Sender>{sender.attributes.displayName}</Sender>
         <Time title={lines[0].timestamp}>{timeFormat.format(new Date(lines[0].timestamp))}</Time>
       </Header>
       <Text>
-        {sender.isTrusted ? <Markdown source={lines[0].text}/> : lines[0].text}
+        {sender.attributes.isTrusted ? <Markdown source={lines[0].text}/> : lines[0].text}
       </Text>
     </Content>
   </Line>
@@ -42,7 +42,7 @@ const MessageListItem = ({ actions, isOutbound, lines, onReactionSelect, onReact
     </Gutter>
     <Content>
       <Text>
-        {sender.isTrusted ? <Markdown source={line.text}/> : line.text}
+        {sender.attributes.isTrusted ? <Markdown source={line.text}/> : line.text}
       </Text>
     </Content>
   </Line>)}
@@ -69,10 +69,12 @@ MessageListItem.propTypes = {
     emoji: string.isRequired
   })).isRequired,
   sender: shape({
-    color: string,
-    displayName: string.isRequired,
-    id: string.isRequired,
-    isTrusted: bool.isRequired
+    attributes: shape({
+      color: string,
+      displayName: string.isRequired,
+      isTrusted: bool.isRequired
+    }).isRequired,
+    id: string.isRequired
   }).isRequired
 };
 
