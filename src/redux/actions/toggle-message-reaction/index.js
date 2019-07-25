@@ -7,7 +7,7 @@ const toggleMessageReaction = ({ emoji, message }) => (dispatch, getState) => {
             reaction: reactions,
             self: [{
               relationships: {
-                member: self
+                identity: self
               }
             }]
           }

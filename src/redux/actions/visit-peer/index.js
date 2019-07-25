@@ -1,6 +1,6 @@
 const visitPeer = ({ history, peer }) => (dispatch, getState) => {
   const { indexes: { resources } } = getState();
-  const self = resources.by.id[resources.by.type.self[0].relationships.member.id][0];
+  const self = resources.by.id[resources.by.type.self[0].relationships.identity.id][0];
 
   const topic = {
     attributes: {
@@ -11,14 +11,14 @@ const visitPeer = ({ history, peer }) => (dispatch, getState) => {
     type: 'topic'
   };
 
-  dispatch({ resource: topic, type: 'CREATE_RESOURCE' });
+  dispatch({ resource: topic, type: 'CREATE_OR_UPDATE_RESOURCE' });
 
   dispatch({
     resource: {
       attributes: {},
       id: [topic.id, self.id].join(','),
       relationships: {
-        member: {
+        identity: {
           id: self.id,
           type: self.type
         },
@@ -29,7 +29,7 @@ const visitPeer = ({ history, peer }) => (dispatch, getState) => {
       },
       type: 'topicMembership'
     },
-    type: 'CREATE_RESOURCE'
+    type: 'CREATE_OR_UPDATE_RESOURCE'
   });
 
   dispatch({
@@ -37,7 +37,7 @@ const visitPeer = ({ history, peer }) => (dispatch, getState) => {
       attributes: {},
       id: [topic.id, peer.id].join(','),
       relationships: {
-        member: {
+        identity: {
           id: peer.id,
           type: peer.type
         },
@@ -48,7 +48,7 @@ const visitPeer = ({ history, peer }) => (dispatch, getState) => {
       },
       type: 'topicMembership'
     },
-    type: 'CREATE_RESOURCE'
+    type: 'CREATE_OR_UPDATE_RESOURCE'
   });
 
   history.push(`/topics/${encodeURIComponent(topic.id)}`);

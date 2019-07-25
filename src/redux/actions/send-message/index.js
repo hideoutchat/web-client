@@ -1,6 +1,4 @@
-import { Buffer } from 'buffer';
-
-const ID_LENGTH = 32;
+import generateId from '@hideoutchat/web-sdk/utilities/cryptography/generate-id';
 
 const sendMessage = ({ text, topic }) => (dispatch, getState) => {
   const {
@@ -10,7 +8,7 @@ const sendMessage = ({ text, topic }) => (dispatch, getState) => {
           type: {
             self: [{
               relationships: {
-                member: sender
+                identity: sender
               }
             }]
           }
@@ -24,7 +22,7 @@ const sendMessage = ({ text, topic }) => (dispatch, getState) => {
         text,
         timestamp: new Date().toISOString()
       },
-      id: Buffer.from(crypto.getRandomValues(new Uint8Array(ID_LENGTH))).toString('base64'),
+      id: generateId(),
       relationships: {
         sender: {
           id: sender.id,

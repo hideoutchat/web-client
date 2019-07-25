@@ -1,6 +1,7 @@
 const groupMessages = (state, topic) => {
   const messages = (state.indexes.resources.by.type.message || []).filter((it) => it.relationships.topic.id === topic.id).sort((a, b) => a.attributes.timestamp.localeCompare(b.attributes.timestamp));
 
+  // eslint-disable-next-line complexity
   return messages.reduce((a, nextMessage) => {
     if (a.previousMessage && nextMessage.relationships.sender.id === a.previousMessage.relationships.sender.id) {
       const previousMessage = a.messages[a.messages.length - 1];
@@ -29,8 +30,8 @@ const groupMessages = (state, topic) => {
     a.previousMessage = nextMessage;
     return a;
   }, {
-    previousMessage: undefined,
-    messages: []
+    messages: [],
+    previousMessage: undefined
   }).messages;
 };
 

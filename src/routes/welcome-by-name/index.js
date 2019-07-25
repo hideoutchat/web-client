@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import Screen from '/components/screen';
+import Select from 'react-select';
 
 import { connect } from 'react-redux';
 import joinNetwork from '/redux/actions/join-network';
@@ -43,6 +44,7 @@ const Message = styled.div`
   border-radius: ${theme('space', 'normal')};
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
   padding: ${theme('space', 'normal')};
 `;
 
@@ -67,42 +69,108 @@ const Welcome = styled.div`
   opacity: 0.1;
 `;
 
-const { func, string } = PropTypes;
+const Network = styled.div`
+  font: ${theme('typeface', 'normal')};
+  margin: ${theme('space', 'large')};
+  opacity: 0.1;
+  padding: ${theme('space', 'large')};
 
-const WelcomeByNameRoute = ({ name, onCommit }) => <Fork
-  condition={Boolean(name)}
-  whenFalse={() => <Redirect to="/"/>}
-  whenTrue={() => <Screen>
-    <Header>
-      <Logo/>
-      <Welcome>
-        <div>01001000 01001001 01000100 01000101</div>
-        <div>01001111 01010101 01010100</div>
-      </Welcome>
-    </Header>
-    <Content>
-      <Message>
-        <p>Ah, yes. Hello, <b style={{ color: '#cba6ff' }}>{name}</b>. Welcome to the Hideout.</p>
-        <p>Your <b style={{ color: '#f0e060' }}>🔑 key</b> is ready. Head on through the door to get started.</p>
-      </Message>
-    </Content>
-    <Door onClick={onCommit}>🚪</Door>
-  </Screen>}
-/>;
+  ${({ theme }) => theme.transition('opacity')}
 
-WelcomeByNameRoute.propTypes = {
-  name: string,
-  onCommit: func.isRequired
-};
+  :hover {
+    opacity: 1;
+  }
+`;
+
+const Label = styled.div`
+  padding: ${theme('space', 'normal')} 0;
+`;
+
+class WelcomeByNameRoute extends React.Component {
+  static options = Object.freeze([
+    { label: 'Cedar', value: 'wss://cedar.hideout.chat:8975' },
+    { label: 'Maple', value: 'wss://maple.hideout.chat:8975' }
+  ]);
+
+  static get propTypes() {
+    const { func, string } = PropTypes;
+
+    return {
+      name: string,
+      onCommit: func.isRequired
+    };
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedOption: this.constructor.options[0]
+    };
+  }
+
+  handleCommit = () => this.props.onCommit({
+    url: this.state.selectedOption.value
+  });
+
+  handleNetworkChange = (selectedOption) => this.setState({ selectedOption });
+
+  render() {
+    const {
+      constructor: { options },
+      handleCommit,
+      handleNetworkChange,
+      props: { name },
+      state: { selectedOption }
+    } = this;
+    return <Fork
+      condition={Boolean(name)}
+      whenFalse={() => <Redirect to="/"/>}
+      whenTrue={() => <Screen>
+        <Header>
+          <Logo/>
+          <Welcome>
+            <div>01001000 01001001 01000100 01000101</div>
+            <div>01001111 01010101 01010100</div>
+          </Welcome>
+        </Header>
+        <Content>
+          <Message>
+            <p>Ah, yes. Hello, <b style={{ color: '#cba6ff' }}>{name}</b>. Welcome to the Hideout.</p>
+            <p>Your <b style={{ color: '#f0e060' }}>🔑 key</b> is ready. Head on through the door to get started.</p>
+          </Message>
+        </Content>
+        <Network>
+          <Label>Network</Label>
+          <Select
+            isClearable={false}
+            onChange={handleNetworkChange}
+            options={options.map((it) => ({ ...it, isSelected: selectedOption === it }))}
+            placeholder={`${options[0].label} (default)`}
+            styles={{
+              option: (provided, state) => ({
+                ...provided,
+                color: state.theme.colors.neutral70
+              })
+            }}
+          />
+        </Network>
+        <Door onClick={handleCommit}>🚪</Door>
+      </Screen>}
+    />;
+  }
+}
 
 export { WelcomeByNameRoute };
 
-const mapStateToProps = (state) => ({
-  name: state.indexes.resources.by.id[state.indexes.resources.by.type.self[0].relationships.member.id][0].attributes.displayName
-});
+const mapStateToProps = (state) => {
+  const self = state.indexes.resources.by.type.self[0].relationships.identity;
+  const name = state.indexes.resources.by.id[self.id][0].attributes.displayName;
+  console.debug('state:', self, state.indexes.resources.by.id);
+  return { name };
+};
 
 const mapDispatchToProps = (dispatch, props) => ({
-  onCommit: () => dispatch(joinNetwork({ history: props.history }))
+  onCommit: ({ url }) => dispatch(joinNetwork({ history: props.history, url }))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WelcomeByNameRoute);

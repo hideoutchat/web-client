@@ -98,7 +98,7 @@ const Welcome = styled.div`
 class NetworkRoute extends React.Component {
   static get propTypes() {
     const { arrayOf, func, number, shape, string } = PropTypes;
-    const memberShape = {
+    const identityShape = {
       attributes: shape({
         displayName: string.isRequired
       }).isRequired,
@@ -108,8 +108,8 @@ class NetworkRoute extends React.Component {
     return {
       onPeerSelect: func.isRequired,
       peerCount: number.isRequired,
-      peers: arrayOf(shape(memberShape)).isRequired,
-      self: shape(memberShape).isRequired
+      peers: arrayOf(shape(identityShape)).isRequired,
+      self: shape(identityShape).isRequired
     };
   }
 
@@ -146,8 +146,8 @@ class NetworkRoute extends React.Component {
           <Welcome>SElERU9VVA</Welcome>
           <Introduction>
             <p><b style={{ color: '#3090f0' }}>{peerCount}</b> other {peerCount === 1 ? 'person is' : 'people are'} here.</p>
-            <p>Looking for someone in particular?</p>
-            <TextInput isAutoFocus onChange={handlePeerNameFilterChange} value={peerNameFilter}/>
+            {peerCount > 0 && <p>Looking for someone in particular?</p>}
+            {peerCount > 0 && <TextInput isAutoFocus onChange={handlePeerNameFilterChange} value={peerNameFilter}/>}
           </Introduction>
         </Header>
         <Content>
@@ -171,9 +171,9 @@ class NetworkRoute extends React.Component {
 export { NetworkRoute };
 
 const mapStateToProps = (state) => ({
-  peerCount: state.indexes.resources.by.type.member.length - 1,
-  peers: state.indexes.resources.by.type.member.filter((it) => state.indexes.resources.by.type.self[0].relationships.member.id !== it.id),
-  self: state.indexes.resources.by.id[state.indexes.resources.by.type.self[0].relationships.member.id][0]
+  peerCount: state.indexes.resources.by.type.identity.length - 1,
+  peers: state.indexes.resources.by.type.identity.filter((it) => state.indexes.resources.by.type.self[0].relationships.identity.id !== it.id),
+  self: state.indexes.resources.by.id[state.indexes.resources.by.type.self[0].relationships.identity.id][0]
 });
 
 const mapDispatchToProps = (dispatch, props) => ({

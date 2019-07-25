@@ -1,6 +1,4 @@
-import { Buffer } from 'buffer';
-
-const ID_LENGTH = 32;
+import generateId from '@hideoutchat/web-sdk/utilities/cryptography/generate-id';
 
 const isValidTransition = (state, action) => !state.resources.some((it) => {
   if (it.type !== 'reaction') {
@@ -23,7 +21,7 @@ const isValidTransition = (state, action) => !state.resources.some((it) => {
 });
 
 const addMessageReaction = ({ emoji, message }) => (dispatch, getState) => {
-  const actor = getState().indexes.resources.by.type.self.relationships.member;
+  const actor = getState().indexes.resources.by.type.self.relationships.identity;
 
   if (isValidTransition(getState(), { actor, emoji, message })) {
     dispatch({
@@ -31,7 +29,7 @@ const addMessageReaction = ({ emoji, message }) => (dispatch, getState) => {
         attributes: {
           emoji
         },
-        id: Buffer.from(crypto.getRandomValues(new Uint8Array(ID_LENGTH))).toString('base64'),
+        id: generateId(),
         relationships: {
           actor: {
             id: actor.id,
