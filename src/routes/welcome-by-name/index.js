@@ -165,7 +165,6 @@ export { WelcomeByNameRoute };
 const mapStateToProps = (state) => {
   const self = state.indexes.resources.by.type.self[0].relationships.identity;
   const name = state.indexes.resources.by.id[self.id][0].attributes.displayName;
-  console.debug('state:', self, state.indexes.resources.by.id);
   return { name };
 };
 

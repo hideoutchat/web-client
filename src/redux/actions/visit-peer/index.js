@@ -1,3 +1,5 @@
+import generateId from '@hideoutchat/web-sdk/utilities/cryptography/generate-id';
+
 const visitPeer = ({ history, peer }) => (dispatch, getState) => {
   const { indexes: { resources } } = getState();
   const self = resources.by.id[resources.by.type.self[0].relationships.identity.id][0];
@@ -6,7 +8,7 @@ const visitPeer = ({ history, peer }) => (dispatch, getState) => {
     attributes: {
       displayName: `${peer.attributes.displayName} & Me`
     },
-    id: [self.id, peer.id].join(','),
+    id: generateId(),
     relationships: {},
     type: 'topic'
   };
@@ -16,7 +18,7 @@ const visitPeer = ({ history, peer }) => (dispatch, getState) => {
   dispatch({
     resource: {
       attributes: {},
-      id: [topic.id, self.id].join(','),
+      id: generateId(),
       relationships: {
         identity: {
           id: self.id,
@@ -35,7 +37,7 @@ const visitPeer = ({ history, peer }) => (dispatch, getState) => {
   dispatch({
     resource: {
       attributes: {},
-      id: [topic.id, peer.id].join(','),
+      id: generateId(),
       relationships: {
         identity: {
           id: peer.id,

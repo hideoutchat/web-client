@@ -1,3 +1,4 @@
+import generateId from '@hideoutchat/web-sdk/utilities/cryptography/generate-id';
 import { hideout } from '@hideoutchat/web-sdk';
 
 const listResourcesByType = (type) => (state) => state.indexes.resources.by.type[type] || [];
@@ -5,27 +6,26 @@ const findResourceById = (id) => (state) => (state.indexes.resources.by.id[id] |
 
 const joinNetwork = ({ history, url }) => (dispatch, getState) => {
   const state = getState();
-  const { attributes: { displayName } } = findResourceById(listResourcesByType('self')(state)[0].relationships.identity.id)(state);
-  const privateKey = listResourcesByType('privateKey')(state)[0].attributes;
+  const self = findResourceById(listResourcesByType('self')(state)[0].relationships.identity.id)(state);
+  const { attributes: privateKey } = findResourceById(self.relationships.privateKey.id)(state);
 
   hideout(WebSocket).connect({
-    onConnect: ({ broadcast, onBroadcast, onGroupEvent, onPeerEvent, sendGroupEvent, sendPeerEvent }) => {
-      console.log('#onConnect()', broadcast, onBroadcast, onGroupEvent, onPeerEvent, sendGroupEvent, sendPeerEvent);
+    onConnect: (connection) => {
+      dispatch({ connection, type: 'CONNECT' });
 
-      dispatch({
-        connection: { broadcast, sendGroupEvent, sendPeerEvent },
-        type: 'CONNECT'
-      });
+      const { broadcast, onBroadcast, onPeerEvent } = connection;
 
       onBroadcast('identity', (event) => {
-        console.log('#onBroadcast():identity', event);
         dispatch({
           resource: {
-            attributes: {
-              displayName: event.identity.displayName
+            attributes: { ...event.identity },
+            id: generateId(),
+            relationships: {
+              publicKey: {
+                id: event.signingKeyId,
+                type: 'publicKey'
+              }
             },
-            id: event.signingKeyId,
-            relationships: {},
             type: 'identity'
           },
           type: 'CREATE_OR_UPDATE_RESOURCE'
@@ -33,25 +33,43 @@ const joinNetwork = ({ history, url }) => (dispatch, getState) => {
       });
 
       onPeerEvent((event) => {
-        console.log('#onPeerEvent()', event);
+        if (event.type === 'text') {
+          const message = {
+            attributes: {
+              text: event.text.text,
+              timestamp: event.text.timestamp
+            },
+            id: event.text.id,
+            relationships: {
+              sender: {
+                id: getState().indexes.resources.by.type.identity.find((it) => it.relationships.publicKey.id === event.signingKeyId).id,
+                type: 'identity'
+              },
+              topic: {
+                id: event.text.topic,
+                type: 'topic'
+              }
+            },
+            type: 'message'
+          };
+          dispatch({ resource: message, type: 'CREATE_OR_UPDATE_RESOURCE' });
+        }
       });
 
-      broadcast('identity', { displayName });
+      broadcast('identity', self.attributes);
 
       history.push('/network');
     },
 
     onDisconnect: () => {
-      console.log('#onDisconnect()');
       dispatch({ type: 'DISCONNECT' });
     },
 
-    onError: (error) => {
-      console.log('#onError()', error);
+    onError: () => {
+      // TODO: Handle the given error.
     },
 
     onPublicKey: (publicKey) => {
-      console.log('#onPublicKey()', publicKey);
       dispatch({
         resource: {
           attributes: { ...publicKey },
