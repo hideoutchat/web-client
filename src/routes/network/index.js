@@ -6,6 +6,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import Screen from '/components/screen';
 import TextInput from '/components/text-input';
+import Timestamp from '/components/timestamp';
 
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -95,6 +96,24 @@ const Welcome = styled.div`
   opacity: 0.1;
 `;
 
+const byMatchingDisplayName = (filter) => {
+  if (!filter) {
+    return () => true;
+  }
+
+  const normalizedFilter = filter.toLowerCase();
+
+  return ({ attributes: { displayName } }) => {
+    if (!displayName) {
+      return true;
+    }
+
+    const normalizedDisplayName = displayName.toLowerCase();
+
+    return normalizedDisplayName.includes(normalizedFilter);
+  };
+};
+
 class NetworkRoute extends React.Component {
   static get propTypes() {
     const { arrayOf, func, number, shape, string } = PropTypes;
@@ -121,12 +140,17 @@ class NetworkRoute extends React.Component {
     };
   }
 
-  handlePeerNameFilterChange = (peerNameFilter) => {
-    const { props: { peers } } = this;
-    const normalizedFilter = peerNameFilter.toLowerCase();
+  componentDidUpdate(previousProps) {
+    if (previousProps.peers !== this.props.peers) {
+      this.setState({
+        filteredPeers: this.props.peers.filter(byMatchingDisplayName(this.state.peerNameFilter))
+      });
+    }
+  }
 
+  handlePeerNameFilterChange = (peerNameFilter) => {
     this.setState({
-      filteredPeers: peers.filter((it) => it.attributes.displayName.toLowerCase().includes(normalizedFilter)),
+      filteredPeers: this.props.peers.filter(byMatchingDisplayName(peerNameFilter)),
       peerNameFilter
     });
   };
@@ -137,7 +161,9 @@ class NetworkRoute extends React.Component {
       props: { onPeerSelect, peerCount, self },
       state: { filteredPeers, peerNameFilter }
     } = this;
+
     return <Fork
+      key={peerCount}
       condition={Boolean(self.attributes.displayName)}
       whenFalse={() => <Redirect to="/"/>}
       whenTrue={() => <Screen>
@@ -154,11 +180,11 @@ class NetworkRoute extends React.Component {
           <PeerList>
             {filteredPeers.map((peer) => <PeerListItem key={peer.id} onClick={() => onPeerSelect(peer)}>
               <PeerAvatar>
-                <Hashatar code={peer.id}/>
+                <Hashatar code={peer.relationships.publicKey.id}/>
               </PeerAvatar>
               <PeerSummary>
                 <PeerName>{peer.attributes.displayName}</PeerName>
-                <PeerActivity>{peer.id}</PeerActivity>
+                <PeerActivity>Last seen <Timestamp value={peer.attributes.lastSeenAt}/></PeerActivity>
               </PeerSummary>
             </PeerListItem>)}
           </PeerList>

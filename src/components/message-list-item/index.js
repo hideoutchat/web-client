@@ -23,7 +23,7 @@ const MessageListItem = ({ actions, isOutbound, lines, onReactionSelect, onReact
   <Line>
     <Gutter>
       <Avatar style={{ borderColor: sender.attributes.color }}>
-        <Hashatar code={sender.id}/>
+        <Hashatar code={sender.relationships.publicKey.id}/>
       </Avatar>
     </Gutter>
     <Content>

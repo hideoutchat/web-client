@@ -20,7 +20,8 @@ const initialize = () => async (dispatch) => {
 
   const identity = {
     attributes: {
-      displayName: deriveDisplayName(privateKey.id)
+      displayName: deriveDisplayName(privateKey.id),
+      lastSeenAt: new Date().toISOString()
     },
     id: generateId(),
     relationships: {

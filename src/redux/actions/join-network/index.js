@@ -16,10 +16,14 @@ const joinNetwork = ({ history, url }) => (dispatch, getState) => {
       const { broadcast, onBroadcast, onPeerEvent } = connection;
 
       onBroadcast('identity', (event) => {
+        const { id = generateId() } = getState().indexes.resources.by.type.identity.find((it) => it.relationships.publicKey.id === event.signingKeyId) || {};
         dispatch({
           resource: {
-            attributes: { ...event.identity },
-            id: generateId(),
+            attributes: {
+              displayName: event.displayName,
+              lastSeenAt: new Date().toISOString()
+            },
+            id,
             relationships: {
               publicKey: {
                 id: event.signingKeyId,
@@ -79,6 +83,7 @@ const joinNetwork = ({ history, url }) => (dispatch, getState) => {
         },
         type: 'CREATE_RESOURCE'
       });
+      getState().connection.broadcast('identity', self.attributes);
     },
 
     privateKey,
