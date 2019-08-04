@@ -11,7 +11,7 @@
     "test": "NODE_ENV=test nyc --silent --check-coverage --lines 100 --per-file mocha --require @babel/register src/spec.setup.js src/**/spec.js"
   },
   "dependencies": {
-    "@hideoutchat/web-sdk": "0.1.0",
+    "@hideoutchat/web-sdk": "0.1.1",
     "prop-types": "15.7.2",
     "react": "16.8.6",
     "react-dom": "16.8.6",
@@ -19,7 +19,7 @@
     "react-redux": "7.1.0",
     "react-router-dom": "5.0.1",
     "react-select": "3.0.4",
-    "react-transition-group": "4.2.1",
+    "react-transition-group": "4.2.2",
     "redux": "4.0.4",
     "redux-thunk": "2.3.0",
     "regenerator-runtime": "0.13.3",
@@ -42,7 +42,7 @@
     "mocha": "6.2.0",
     "nyc": "14.1.1",
     "parcel-bundler": "1.12.3",
-    "sinon": "7.3.2",
+    "sinon": "7.4.0",
     "sinon-chai": "3.3.0"
   }
 }
