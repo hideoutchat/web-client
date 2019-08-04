@@ -992,10 +992,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.3.tgz#dfa0c92efe44a1d1a7974fb49ffeb40ef2da5a27"
   integrity sha512-zVgvPwGK7c1aVdUVc9Qv7SqepOGRDrqCw7KZPSZziWGxSlbII3gmvGLPzLX4d0n0BMbamBacUrN22zOMyFFEkQ==
 
-"@hideoutchat/web-sdk@0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@hideoutchat/web-sdk/-/web-sdk-0.1.1.tgz#a9ff7ce6fbda04fbefeee6bd004bd5bb08cb2dfd"
-  integrity sha512-0JMNrdvEoKDR4stAgzV0gdc6ADc2fWAOeU/+sXHyBQ8/gz/+TwKyUeSvjgyK4Z6SIiNnIm0rPAoF6g+NHa38ZQ==
+"@hideoutchat/web-sdk@0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@hideoutchat/web-sdk/-/web-sdk-0.1.2.tgz#5ab612908c1037d7064abcad526cf6a0ebaec694"
+  integrity sha512-WdxXmmahYP21kGkhtL/CPpJunc2BQHNt4CJpuhOBVkHUd73fjYeOLe+Rx8iwDs+YQUDuqlGberwKOOIgC4/CNw==
   dependencies:
     buffer "5.2.1"
     regenerator-runtime "0.13.3"
