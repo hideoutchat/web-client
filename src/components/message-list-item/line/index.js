@@ -1,5 +1,8 @@
 import styled, { keyframes } from 'styled-components';
 
+import PropTypes from 'prop-types';
+import React from 'react';
+
 const fadeInFromBelow = keyframes`
   from {
     opacity: 0;
@@ -12,7 +15,7 @@ const fadeInFromBelow = keyframes`
   }
 `;
 
-const Line = styled.div`
+const StyledLine = styled.div`
   align-items: flex-start;
   animation-duration: 100ms;
   animation-fill-mode: both;
@@ -22,5 +25,32 @@ const Line = styled.div`
   line-height: 16px;
   padding: 4px;
 `;
+
+class Line extends React.Component {
+  static get propTypes() {
+    const { bool, func, node } = PropTypes;
+    return {
+      children: node,
+      isRead: bool.isRequired,
+      onRead: func.isRequired
+    };
+  }
+
+  componentDidMount() {
+    if (!this.props.isRead) {
+      this.props.onRead();
+    }
+  }
+
+  componentDidUpdate() {
+    if (!this.props.isRead) {
+      this.props.onRead();
+    }
+  }
+
+  render() {
+    return <StyledLine>{this.props.children}</StyledLine>;
+  }
+}
 
 export default Line;

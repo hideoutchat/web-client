@@ -1,5 +1,6 @@
 import generateId from '@hideoutchat/web-sdk/utilities/cryptography/generate-id';
 import { hideout } from '@hideoutchat/web-sdk';
+import initializeTopicForPeer from './initialize-topic-for-peer';
 
 const listResourcesByType = (type) => (state) => state.indexes.resources.by.type[type] || [];
 const findResourceById = (id) => (state) => (state.indexes.resources.by.id[id] || [])[0];
@@ -16,24 +17,27 @@ const joinNetwork = ({ history, url }) => (dispatch, getState) => {
       const { broadcast, onBroadcast, onPeerEvent } = connection;
 
       onBroadcast('identity', (event) => {
-        const { id = generateId() } = getState().indexes.resources.by.type.identity.find((it) => it.relationships.publicKey.id === event.signingKeyId) || {};
-        dispatch({
-          resource: {
-            attributes: {
-              displayName: event.displayName,
-              lastSeenAt: new Date().toISOString()
-            },
-            id,
-            relationships: {
-              publicKey: {
-                id: event.signingKeyId,
-                type: 'publicKey'
-              }
-            },
-            type: 'identity'
+        const { indexes: { resources: { by: resourcesBy } } } = getState();
+        const { id = generateId() } = resourcesBy.type.identity.find((it) => it.relationships.publicKey.id === event.signingKeyId) || {};
+        const self = resourcesBy.id[resourcesBy.type.self[0].relationships.identity.id][0];
+        const peer = {
+          attributes: {
+            displayName: event.displayName,
+            lastSeenAt: new Date().toISOString()
           },
-          type: 'CREATE_OR_UPDATE_RESOURCE'
-        });
+          id,
+          relationships: {
+            publicKey: {
+              id: event.signingKeyId,
+              type: 'publicKey'
+            }
+          },
+          type: 'identity'
+        };
+
+        dispatch({ resource: peer, type: 'CREATE_OR_UPDATE_RESOURCE' });
+
+        initializeTopicForPeer({ peer, self })(dispatch);
       });
 
       onPeerEvent((event) => {

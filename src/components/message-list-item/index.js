@@ -18,9 +18,9 @@ import Time from './time';
 
 const timeFormat = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric' });
 
-const MessageListItem = ({ actions, isOutbound, lines, onReactionSelect, onReactionToggle, onSelect, reactions, sender }) => <Message isOutbound={isOutbound} onLongPress={onSelect}>
+const MessageListItem = ({ actions, isOutbound, lines, onLineRead, onReactionSelect, onReactionToggle, onSelect, reactions, sender }) => <Message isOutbound={isOutbound} onLongPress={onSelect}>
   {actions && <ActionList>{actions}</ActionList>}
-  <Line>
+  <Line isRead={lines[0].isRead} onRead={() => onLineRead(lines[0])}>
     <Gutter>
       <Avatar style={{ borderColor: sender.attributes.color }}>
         <Hashatar code={sender.relationships.publicKey.id}/>
@@ -36,7 +36,7 @@ const MessageListItem = ({ actions, isOutbound, lines, onReactionSelect, onReact
       </Text>
     </Content>
   </Line>
-  {lines.slice(1).map((line, index) => <Line key={index}>
+  {lines.slice(1).map((line) => <Line key={line.id} isRead={line.isRead} onRead={() => onLineRead(line)}>
     <Gutter>
       <Time title={line.timestamp}>{timeFormat.format(new Date(line.timestamp))}</Time>
     </Gutter>
@@ -58,9 +58,12 @@ MessageListItem.propTypes = {
   actions: node,
   isOutbound: bool,
   lines: arrayOf(shape({
+    id: string.isRequired,
+    isRead: bool.isRequired,
     text: string.isRequired,
     timestamp: string.isRequired
   })).isRequired,
+  onLineRead: func.isRequired,
   onReactionSelect: func.isRequired,
   onReactionToggle: func.isRequired,
   onSelect: func.isRequired,

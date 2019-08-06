@@ -6,6 +6,8 @@ const groupMessages = (state, topic) => {
     if (a.previousMessage && nextMessage.relationships.sender.id === a.previousMessage.relationships.sender.id) {
       const previousMessage = a.messages[a.messages.length - 1];
       previousMessage.lines.push({
+        id: nextMessage.id,
+        isRead: Boolean(nextMessage.attributes.viewedAt),
         text: nextMessage.attributes.text,
         timestamp: nextMessage.attributes.timestamp
       });
@@ -20,6 +22,8 @@ const groupMessages = (state, topic) => {
       a.messages.push({
         id: nextMessage.id,
         lines: [{
+          id: nextMessage.id,
+          isRead: Boolean(nextMessage.attributes.viewedAt),
           text: nextMessage.attributes.text,
           timestamp: nextMessage.attributes.timestamp
         }],

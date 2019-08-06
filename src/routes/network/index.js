@@ -1,9 +1,7 @@
-import Fork from '/components/fork';
 import Hashatar from '/components/hashatar';
 import Logo from '/components/logo';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import Screen from '/components/screen';
 import TextInput from '/components/text-input';
 import Timestamp from '/components/timestamp';
@@ -11,7 +9,7 @@ import Timestamp from '/components/timestamp';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import theme from '/utilities/styled/theme';
-import visitPeer from '/redux/actions/visit-peer';
+import visitTopic from '/redux/actions/visit-topic';
 
 const Header = styled.div`
   align-items: center;
@@ -26,7 +24,7 @@ const Content = styled.div`
   overflow: hidden;
 `;
 
-const PeerList = styled.div`
+const TopicList = styled.div`
   align-items: stretch;
   display: flex;
   flex: 1;
@@ -37,7 +35,7 @@ const PeerList = styled.div`
   width: 90%;
 `;
 
-const PeerListItem = styled.div`
+const TopicListItem = styled.div`
   background-color: rgba(0, 0, 0, 0.25);
   border-color: transparent;
   border-style: solid;
@@ -61,7 +59,7 @@ const PeerListItem = styled.div`
   }
 `;
 
-const PeerAvatar = styled.div`
+const TopicAvatar = styled.div`
   background-color: #000000;
   border-radius: 50%;
   font-size: 48px;
@@ -70,20 +68,33 @@ const PeerAvatar = styled.div`
   width: 48px;
 `;
 
-const PeerSummary = styled.div`
+const TopicSummary = styled.div`
   flex: 1;
   margin: ${theme('space', 'normal')};
 `;
 
-const PeerName = styled.div`
+const TopicName = styled.div`
   font-weight: 700;
   line-height: 24px;
 `;
 
-const PeerActivity = styled.div`
+const TopicActivity = styled.div`
   font-size: 0.8em;
   line-height: 24px;
-  opacity: 0.5;
+  ${(props) => {
+    if (props.isShiny) {
+      return `
+        opacity: 1.0;
+
+        ::after {
+          content: " ✨";
+        }
+      `;
+    }
+    return `
+      opacity: 0.5;
+    `;
+  }}
 `;
 
 const Introduction = styled.div`
@@ -103,7 +114,7 @@ const byMatchingDisplayName = (filter) => {
 
   const normalizedFilter = filter.toLowerCase();
 
-  return ({ attributes: { displayName } }) => {
+  return ({ displayName }) => {
     if (!displayName) {
       return true;
     }
@@ -116,81 +127,74 @@ const byMatchingDisplayName = (filter) => {
 
 class NetworkRoute extends React.Component {
   static get propTypes() {
-    const { arrayOf, func, number, shape, string } = PropTypes;
-    const identityShape = {
-      attributes: shape({
-        displayName: string.isRequired
-      }).isRequired,
-      id: string.isRequired
-    };
-
+    const { arrayOf, bool, func, number, shape, string } = PropTypes;
     return {
-      onPeerSelect: func.isRequired,
+      onTopicSelect: func.isRequired,
       peerCount: number.isRequired,
-      peers: arrayOf(shape(identityShape)).isRequired,
-      self: shape(identityShape).isRequired
+      topics: arrayOf(shape({
+        displayName: string.isRequired,
+        hasUnreadMessages: bool.isRequired,
+        hashatar: string.isRequired,
+        id: string.isRequired,
+        updatedAt: string.isRequired
+      })).isRequired
     };
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      filteredPeers: props.peers,
-      peerNameFilter: ''
+      filteredTopics: props.topics,
+      topicFilter: ''
     };
   }
 
   componentDidUpdate(previousProps) {
-    if (previousProps.peers !== this.props.peers) {
+    if (previousProps.topics !== this.props.topics) {
       this.setState({
-        filteredPeers: this.props.peers.filter(byMatchingDisplayName(this.state.peerNameFilter))
+        filteredTopics: this.props.topics.filter(byMatchingDisplayName(this.state.topicFilter))
       });
     }
   }
 
-  handlePeerNameFilterChange = (peerNameFilter) => {
+  handleTopicFilterChange = (topicFilter) => {
     this.setState({
-      filteredPeers: this.props.peers.filter(byMatchingDisplayName(peerNameFilter)),
-      peerNameFilter
+      filteredTopics: this.props.topics.filter(byMatchingDisplayName(topicFilter)),
+      topicFilter
     });
   };
 
   render() {
     const {
-      handlePeerNameFilterChange,
-      props: { onPeerSelect, peerCount, self },
-      state: { filteredPeers, peerNameFilter }
+      handleTopicFilterChange,
+      props: { onTopicSelect, peerCount },
+      state: { filteredTopics, topicFilter }
     } = this;
 
-    return <Fork
-      key={peerCount}
-      condition={Boolean(self.attributes.displayName)}
-      whenFalse={() => <Redirect to="/"/>}
-      whenTrue={() => <Screen>
-        <Header>
-          <Logo/>
-          <Welcome>SElERU9VVA</Welcome>
-          <Introduction>
-            <p><b style={{ color: '#3090f0' }}>{peerCount}</b> other {peerCount === 1 ? 'person is' : 'people are'} here.</p>
-            {peerCount > 0 && <p>Looking for someone in particular?</p>}
-            {peerCount > 0 && <TextInput isAutoFocus onChange={handlePeerNameFilterChange} value={peerNameFilter}/>}
-          </Introduction>
-        </Header>
-        <Content>
-          <PeerList>
-            {filteredPeers.map((peer) => <PeerListItem key={peer.id} onClick={() => onPeerSelect(peer)}>
-              <PeerAvatar>
-                <Hashatar code={peer.relationships.publicKey.id}/>
-              </PeerAvatar>
-              <PeerSummary>
-                <PeerName>{peer.attributes.displayName}</PeerName>
-                <PeerActivity>Last seen <Timestamp value={peer.attributes.lastSeenAt}/></PeerActivity>
-              </PeerSummary>
-            </PeerListItem>)}
-          </PeerList>
-        </Content>
-      </Screen>}
-    />;
+    return <Screen>
+      <Header>
+        <Logo/>
+        <Welcome>SElERU9VVA</Welcome>
+        <Introduction>
+          <p><b style={{ color: '#3090f0' }}>{peerCount}</b> other {peerCount === 1 ? 'person is' : 'people are'} here.</p>
+          {peerCount > 0 && <p>Looking for someone in particular?</p>}
+          {peerCount > 0 && <TextInput isAutoFocus onChange={handleTopicFilterChange} value={topicFilter}/>}
+        </Introduction>
+      </Header>
+      <Content>
+        <TopicList>
+          {filteredTopics.map((topic) => <TopicListItem key={topic.id} onClick={() => onTopicSelect(topic)}>
+            <TopicAvatar>
+              <Hashatar code={topic.hashatar}/>
+            </TopicAvatar>
+            <TopicSummary>
+              <TopicName>{topic.displayName}</TopicName>
+              <TopicActivity isShiny={topic.hasUnreadMessages}>Last active <Timestamp value={topic.updatedAt}/></TopicActivity>
+            </TopicSummary>
+          </TopicListItem>)}
+        </TopicList>
+      </Content>
+    </Screen>;
   }
 }
 
@@ -198,12 +202,22 @@ export { NetworkRoute };
 
 const mapStateToProps = (state) => ({
   peerCount: state.indexes.resources.by.type.identity.length - 1,
-  peers: state.indexes.resources.by.type.identity.filter((it) => state.indexes.resources.by.type.self[0].relationships.identity.id !== it.id),
-  self: state.indexes.resources.by.id[state.indexes.resources.by.type.self[0].relationships.identity.id][0]
+  topics: (state.indexes.resources.by.type.topic || []).map((it) => ({
+    displayName: it.attributes.displayName,
+    hasUnreadMessages: (state.indexes.resources.by.type.message || []).some((message) => message.relationships.topic.id === it.id && !message.attributes.viewedAt),
+    hashatar: it.relationships.symmetricKey.id,
+    id: it.id,
+    updatedAt: (state.indexes.resources.by.type.message || []).reduce((a, b) => {
+      if (b.relationships.topic.id === it.id && b.attributes.timestamp && b.attributes.timestamp > a) {
+        return b.attributes.timestamp;
+      }
+      return a;
+    }, it.attributes.updatedAt)
+  }))
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  onPeerSelect: (peer) => dispatch(visitPeer({ history: props.history, peer }))
+  onTopicSelect: (topic) => dispatch(visitTopic({ history: props.history, topic }))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NetworkRoute);

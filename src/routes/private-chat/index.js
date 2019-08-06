@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import editMessage from '/redux/actions/edit-message';
 import groupMessages from './group-messages';
 import leaveChat from '/redux/actions/leave-chat';
+import readMessage from '/redux/actions/read-message';
 import removeMessage from '/redux/actions/remove-message';
 import selectMessageReaction from '/redux/actions/select-message-reaction';
 import sendMessage from '/redux/actions/send-message';
@@ -136,10 +137,7 @@ const Shine = styled.div`
   width: ${theme('space', 'normal')};
 `;
 
-const BACK = -1;
-const goBack = (history) => () => history.go(BACK);
-
-const PrivateChatRoute = ({ history, isDistracting, messages, onLeave, onMessageEdit, onMessageReactionSelect, onMessageReactionToggle, onMessageRemove, onMessageSend, topic }) => <Screen style={{ minWidth: '80%' }}>
+const PrivateChatRoute = ({ history, isDistracting, messages, onLeave, onMessageEdit, onMessageReactionSelect, onMessageReactionToggle, onMessageRead, onMessageRemove, onMessageSend, topic }) => <Screen style={{ minWidth: '80%' }}>
   <Panel
     content={<Children>
       <MessageList count={messages.length}>
@@ -155,6 +153,7 @@ const PrivateChatRoute = ({ history, isDistracting, messages, onLeave, onMessage
           lines={it.lines}
           onReactionSelect={() => onMessageReactionSelect(it)}
           onReactionToggle={(emoji) => onMessageReactionToggle({ emoji, message: it })}
+          onLineRead={onMessageRead}
           onSelect={() => true}
           reactions={it.reactions}
           sender={it.sender}
@@ -165,7 +164,7 @@ const PrivateChatRoute = ({ history, isDistracting, messages, onLeave, onMessage
       <MessageForm onCommit={onMessageSend}/>
     </Footer>}
     header={<Header>
-      <Icon onClick={goBack(history)}>
+      <Icon onClick={() => history.replace('/network')}>
         <Hamburger/>
         {isDistracting && <Shine/>}
       </Icon>
@@ -203,6 +202,8 @@ PrivateChatRoute.propTypes = {
   messages: arrayOf(shape({
     id: string.isRequired,
     lines: arrayOf(shape({
+      id: string.isRequired,
+      isRead: bool.isRequired,
       text: string.isRequired,
       timestamp: string.isRequired
     })).isRequired,
@@ -223,6 +224,7 @@ PrivateChatRoute.propTypes = {
   onMessageEdit: func.isRequired,
   onMessageReactionSelect: func.isRequired,
   onMessageReactionToggle: func.isRequired,
+  onMessageRead: func.isRequired,
   onMessageRemove: func.isRequired,
   onMessageSend: func.isRequired,
   topic: shape({
@@ -236,8 +238,10 @@ PrivateChatRoute.propTypes = {
 export { PrivateChatRoute };
 
 const mapStateToProps = (state, props) => ({
-  isDistracting: (state.indexes.resources.by.type.message || []).some((it) => it.relationships.topic.id !== decodeURIComponent(props.match.params.id)),
-  messages: groupMessages(state, { id: decodeURIComponent(props.match.params.id) }),
+  isDistracting: (state.indexes.resources.by.type.message || []).some((it) => it.relationships.topic.id !== decodeURIComponent(props.match.params.id) && !it.attributes.viewedAt),
+  messages: groupMessages(state, {
+    id: decodeURIComponent(props.match.params.id)
+  }),
   topic: state.indexes.resources.by.id[decodeURIComponent(props.match.params.id)][0]
 });
 
@@ -246,6 +250,7 @@ const mapDispatchToProps = (dispatch, { history, match }) => ({
   onMessageEdit: (message) => dispatch(editMessage({ message })),
   onMessageReactionSelect: (message) => dispatch(selectMessageReaction({ history, message })),
   onMessageReactionToggle: ({ emoji, message }) => dispatch(toggleMessageReaction({ emoji, message })),
+  onMessageRead: (message) => dispatch(readMessage({ message })),
   onMessageRemove: (message) => dispatch(removeMessage({ message })),
   onMessageSend: ({ text }) => dispatch(sendMessage({
     text,

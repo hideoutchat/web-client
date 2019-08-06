@@ -6,18 +6,19 @@ const generateTopicId = ({ peer, self }) => new SHA3(256).update('topic:').updat
 // eslint-disable-next-line no-magic-numbers
 const generateTopicMembershipId = ({ member, topic }) => new SHA3(256).update(`topicMembership:${topic.id}:${member.id}`).digest('base64');
 
-const visitPeer = ({ history, peer }) => (dispatch, getState) => {
-  const { indexes: { resources } } = getState();
-  const self = resources.by.id[resources.by.type.self[0].relationships.identity.id][0];
-
+const initializeTopicForPeer = ({ peer, self }) => (dispatch) => {
   const topic = {
     attributes: {
-      displayName: `${peer.attributes.displayName} & Me`
+      displayName: `${peer.attributes.displayName} & Me`,
+      updatedAt: new Date().toISOString()
     },
     id: generateTopicId({ peer, self }),
     relationships: {},
     type: 'topic'
   };
+
+  // FIXME: This is a hack until all topics truly have DH-negotiated symmetric keys.
+  topic.relationships.symmetricKey = { id: topic.id, type: 'symmetricKey' };
 
   dispatch({ resource: topic, type: 'CREATE_OR_UPDATE_RESOURCE' });
 
@@ -58,8 +59,6 @@ const visitPeer = ({ history, peer }) => (dispatch, getState) => {
     },
     type: 'CREATE_OR_UPDATE_RESOURCE'
   });
-
-  history.push(`/topics/${encodeURIComponent(topic.id)}`);
 };
 
-export default visitPeer;
+export default initializeTopicForPeer;
