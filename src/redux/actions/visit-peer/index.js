@@ -1,4 +1,10 @@
-import generateId from '@hideoutchat/web-sdk/utilities/cryptography/generate-id';
+import { SHA3 } from 'sha3';
+
+// eslint-disable-next-line no-magic-numbers
+const generateTopicId = ({ peer, self }) => new SHA3(256).update('topic:').update([self.relationships.publicKey.id, peer.relationships.publicKey.id].sort().join(':')).digest('base64');
+
+// eslint-disable-next-line no-magic-numbers
+const generateTopicMembershipId = ({ member, topic }) => new SHA3(256).update(`topicMembership:${topic.id}:${member.id}`).digest('base64');
 
 const visitPeer = ({ history, peer }) => (dispatch, getState) => {
   const { indexes: { resources } } = getState();
@@ -8,7 +14,7 @@ const visitPeer = ({ history, peer }) => (dispatch, getState) => {
     attributes: {
       displayName: `${peer.attributes.displayName} & Me`
     },
-    id: generateId(),
+    id: generateTopicId({ peer, self }),
     relationships: {},
     type: 'topic'
   };
@@ -18,7 +24,7 @@ const visitPeer = ({ history, peer }) => (dispatch, getState) => {
   dispatch({
     resource: {
       attributes: {},
-      id: generateId(),
+      id: generateTopicMembershipId({ member: self, topic }),
       relationships: {
         identity: {
           id: self.id,
@@ -37,7 +43,7 @@ const visitPeer = ({ history, peer }) => (dispatch, getState) => {
   dispatch({
     resource: {
       attributes: {},
-      id: generateId(),
+      id: generateTopicMembershipId({ member: peer, topic }),
       relationships: {
         identity: {
           id: peer.id,

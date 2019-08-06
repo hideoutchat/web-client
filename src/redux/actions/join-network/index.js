@@ -43,7 +43,7 @@ const joinNetwork = ({ history, url }) => (dispatch, getState) => {
               text: event.text.text,
               timestamp: event.text.timestamp
             },
-            id: event.text.id,
+            id: event.text.id || generateId(),
             relationships: {
               sender: {
                 id: getState().indexes.resources.by.type.identity.find((it) => it.relationships.publicKey.id === event.signingKeyId).id,

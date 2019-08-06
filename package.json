@@ -11,7 +11,7 @@
     "test": "NODE_ENV=test nyc --silent --check-coverage --lines 100 --per-file mocha --require @babel/register src/spec.setup.js src/**/spec.js"
   },
   "dependencies": {
-    "@hideoutchat/web-sdk": "0.1.2",
+    "@hideoutchat/web-sdk": "0.1.3",
     "prop-types": "15.7.2",
     "react": "16.8.6",
     "react-dom": "16.8.6",
