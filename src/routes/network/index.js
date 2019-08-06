@@ -15,6 +15,10 @@ const Header = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
+
+  @media (max-height: 30rem) {
+    display: none;
+  }
 `;
 
 const Content = styled.div`
@@ -178,9 +182,9 @@ class NetworkRoute extends React.Component {
         <Introduction>
           <p><b style={{ color: '#3090f0' }}>{peerCount}</b> other {peerCount === 1 ? 'person is' : 'people are'} here.</p>
           {peerCount > 0 && <p>Looking for someone in particular?</p>}
-          {peerCount > 0 && <TextInput isAutoFocus onChange={handleTopicFilterChange} value={topicFilter}/>}
         </Introduction>
       </Header>
+      {peerCount > 0 && <TextInput isAutoFocus onChange={handleTopicFilterChange} value={topicFilter}/>}
       <Content>
         <TopicList>
           {filteredTopics.map((topic) => <TopicListItem key={topic.id} onClick={() => onTopicSelect(topic)}>
