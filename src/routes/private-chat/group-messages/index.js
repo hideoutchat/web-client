@@ -11,7 +11,15 @@ const groupMessages = (state, topic) => {
         text: nextMessage.attributes.text,
         timestamp: nextMessage.attributes.timestamp
       });
-      const reactions = (state.indexes.resources.by.type.reaction || []).filter((reaction) => reaction.relationships.message.id === nextMessage.id);
+      const reactions = (state.indexes.resources.by.type.reaction || []).filter((reaction) => reaction.relationships.target.id === nextMessage.id).reduce((a, reaction) => {
+        const sum = a.find((it) => it.emoji === reaction.attributes.emoji);
+        if (sum) {
+          sum.count += 1;
+        } else {
+          a.push({ count: 1, emoji: reaction.attributes.emoji });
+        }
+        return a;
+      }, []);
 
       if (reactions.length > 0) {
         for (const reaction of reactions) {
@@ -27,7 +35,15 @@ const groupMessages = (state, topic) => {
           text: nextMessage.attributes.text,
           timestamp: nextMessage.attributes.timestamp
         }],
-        reactions: (state.indexes.resources.by.type.reaction || []).filter((reaction) => reaction.relationships.message.id === nextMessage.id),
+        reactions: (state.indexes.resources.by.type.reaction || []).filter((reaction) => reaction.relationships.target.id === nextMessage.id).reduce((a, reaction) => {
+          const sum = a.find((it) => it.emoji === reaction.attributes.emoji);
+          if (sum) {
+            sum.count += 1;
+          } else {
+            a.push({ count: 1, emoji: reaction.attributes.emoji });
+          }
+          return a;
+        }, []),
         sender: state.indexes.resources.by.id[nextMessage.relationships.sender.id][0]
       });
     }

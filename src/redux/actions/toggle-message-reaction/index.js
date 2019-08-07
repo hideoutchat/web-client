@@ -1,8 +1,12 @@
+import addMessageReaction from '../add-message-reaction';
+import sendTopicPacket from '../send-topic-packet';
+
 const toggleMessageReaction = ({ emoji, message }) => (dispatch, getState) => {
   const {
     indexes: {
       resources: {
         by: {
+          id: resourcesById,
           type: {
             reaction: reactions,
             self: [{
@@ -16,10 +20,22 @@ const toggleMessageReaction = ({ emoji, message }) => (dispatch, getState) => {
     }
   } = getState();
 
-  if (reactions.some((it) => it.relationships.message.id === message.id && it.relationships.reactor.id === self.id)) {
-    dispatch({ emoji, message, reactor: self, type: 'DESTROY_RESOURCE' });
+  const reaction = reactions.find((it) => it.relationships.target.id === message.id && it.relationships.actor.id === self.id);
+
+  if (reaction) {
+    dispatch({ resource: { id: reaction.id }, type: 'DESTROY_RESOURCE' });
+    sendTopicPacket({
+      packet: {
+        removeReaction: {
+          emoji,
+          message: message.id
+        },
+        type: 'removeReaction'
+      },
+      topic: resourcesById[message.id][0].relationships.topic
+    })(dispatch, getState);
   } else {
-    dispatch({ emoji, message, reactor: self, type: 'CREATE_RESOURCE' });
+    addMessageReaction({ emoji, message })(dispatch, getState);
   }
 };
 

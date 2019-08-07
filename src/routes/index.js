@@ -18,9 +18,9 @@ const createRoutes = () => {
       whenTrue={() => <Switch>
         <Route component={NetworkRoute} exact path="/network"/>
         <Route component={PrivateChatRoute} exact path="/topics/:id"/>
-        <Route component={DialogRoute} path="/"/>
       </Switch>}
     />
+    <Route component={DialogRoute} path="/"/>
   </Router>;
 
   return Routes;

@@ -251,7 +251,7 @@ const mapDispatchToProps = (dispatch, { history, match }) => ({
   onMessageReactionSelect: (message) => dispatch(selectMessageReaction({ history, message })),
   onMessageReactionToggle: ({ emoji, message }) => dispatch(toggleMessageReaction({ emoji, message })),
   onMessageRead: (message) => dispatch(readMessage({ message })),
-  onMessageRemove: (message) => dispatch(removeMessage({ message })),
+  onMessageRemove: (message) => dispatch(removeMessage({ messageIds: message.lines.map((it) => it.id) })),
   onMessageSend: ({ text }) => dispatch(sendMessage({
     text,
     topic: {

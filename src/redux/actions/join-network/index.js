@@ -1,6 +1,7 @@
 import generateId from '@hideoutchat/web-sdk/utilities/cryptography/generate-id';
 import { hideout } from '@hideoutchat/web-sdk';
 import initializeTopicForPeer from './initialize-topic-for-peer';
+import onEvent from './events';
 
 const listResourcesByType = (type) => (state) => state.indexes.resources.by.type[type] || [];
 const findResourceById = (id) => (state) => (state.indexes.resources.by.id[id] || [])[0];
@@ -40,29 +41,7 @@ const joinNetwork = ({ history, url }) => (dispatch, getState) => {
         initializeTopicForPeer({ peer, self })(dispatch);
       });
 
-      onPeerEvent((event) => {
-        if (event.type === 'text') {
-          const message = {
-            attributes: {
-              text: event.text.text,
-              timestamp: event.text.timestamp
-            },
-            id: event.text.id || generateId(),
-            relationships: {
-              sender: {
-                id: getState().indexes.resources.by.type.identity.find((it) => it.relationships.publicKey.id === event.signingKeyId).id,
-                type: 'identity'
-              },
-              topic: {
-                id: event.text.topic,
-                type: 'topic'
-              }
-            },
-            type: 'message'
-          };
-          dispatch({ resource: message, type: 'CREATE_OR_UPDATE_RESOURCE' });
-        }
-      });
+      onPeerEvent((event) => onEvent(event)(dispatch, getState));
 
       broadcast('identity', self.attributes);
 

@@ -1,4 +1,5 @@
 import generateId from '@hideoutchat/web-sdk/utilities/cryptography/generate-id';
+import sendTopicPacket from '../send-topic-packet';
 
 const isValidTransition = (state, action) => !state.resources.some((it) => {
   if (it.type !== 'reaction') {
@@ -20,10 +21,11 @@ const isValidTransition = (state, action) => !state.resources.some((it) => {
   return true;
 });
 
-const addMessageReaction = ({ emoji, message }) => (dispatch, getState) => {
-  const actor = getState().indexes.resources.by.type.self.relationships.identity;
+const addMessageReaction = ({ actor, emoji, message }) => (dispatch, getState) => {
+  const self = getState().indexes.resources.by.type.self[0].relationships.identity;
+  const reactor = actor || self;
 
-  if (isValidTransition(getState(), { actor, emoji, message })) {
+  if (isValidTransition(getState(), { actor: reactor, emoji, message })) {
     dispatch({
       resource: {
         attributes: {
@@ -32,18 +34,31 @@ const addMessageReaction = ({ emoji, message }) => (dispatch, getState) => {
         id: generateId(),
         relationships: {
           actor: {
-            id: actor.id,
-            type: actor.type
+            id: reactor.id,
+            type: reactor.type
           },
           target: {
             id: message.id,
-            type: message.type
+            type: 'message'
           }
         },
         type: 'reaction'
       },
       type: 'CREATE_RESOURCE'
     });
+
+    if (reactor.id === self.id) {
+      sendTopicPacket({
+        packet: {
+          addReaction: {
+            emoji,
+            message: message.id
+          },
+          type: 'addReaction'
+        },
+        topic: getState().indexes.resources.by.id[message.id][0].relationships.topic
+      })(dispatch, getState);
+    }
   }
 };
 
