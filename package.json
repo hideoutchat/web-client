@@ -5,6 +5,7 @@
   "scripts": {
     "build": "parcel build --no-autoinstall --no-source-maps --out-dir lib src/index.html",
     "coverage": "nyc report",
+    "deploy": "aws s3 sync --delete --acl public-read lib/ \"s3://${HIDEOUT_S3_BUCKET}/\" && aws cloudfront create-invalidation --distribution-id \"${HIDEOUT_CLOUDFRONT_DISTRIBUTION}\" --paths /",
     "documentation": "rm -fR docs; find src -type f -name index.js | xargs jsdoc --destination ./docs --package ./package.json --readme ./README.md",
     "lint": "eslint src",
     "start": "parcel serve --no-autoinstall --no-hmr --https --port 7040 --host localhost --out-dir lib src/index.html",
