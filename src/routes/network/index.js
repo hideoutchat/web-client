@@ -101,6 +101,13 @@ const TopicActivity = styled.div`
   }}
 `;
 
+const Search = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font: ${theme('typeface', 'normal')};
+`;
+
 const Introduction = styled.div`
   font: ${theme('typeface', 'normal')};
   text-align: center;
@@ -184,7 +191,9 @@ class NetworkRoute extends React.Component {
           {peerCount > 0 && <p>Looking for someone in particular?</p>}
         </Introduction>
       </Header>
-      {peerCount > 0 && <TextInput isAutoFocus onChange={handleTopicFilterChange} value={topicFilter}/>}
+      {peerCount > 0 && <Search>
+        <TextInput isAutoFocus onChange={handleTopicFilterChange} value={topicFilter}/>
+      </Search>}
       <Content>
         <TopicList>
           {filteredTopics.map((topic) => <TopicListItem key={topic.id} onClick={() => onTopicSelect(topic)}>
