@@ -27,7 +27,7 @@ create a secure way for two or more strangers to communicate.
  * Atop the foundation of the Hideout protocol, the Hideout web app
    provides app-layer features and a UI to enable secure collaboration.
    Among these are emoji reactions, group chats, file and image sharing,
-   and more. All built on an end-to-end encrypted secure network!
+   and more. All built on an encrypted peer-to-peer network!
 
  * Hideout rendezvous nodes form a **zero-trust network**. Anyone can host
    a rendezvous node and join the network. The only requirement for a
