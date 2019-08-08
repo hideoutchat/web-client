@@ -13,7 +13,7 @@ const Screen = styled.div`
   flex-direction: column;
   margin: ${theme('space', 'huge')} auto;
   max-width: 80%;
-  min-width: 28%;
+  min-width: 300px;
   overflow: hidden;
 
   ${({ theme }) => theme.transition('min-width')}
