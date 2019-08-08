@@ -21,6 +21,7 @@ const initialize = () => async (dispatch) => {
   const identity = {
     attributes: {
       displayName: deriveDisplayName(privateKey.id),
+      isTrusted: true,
       lastSeenAt: new Date().toISOString()
     },
     id: generateId(),

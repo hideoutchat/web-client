@@ -24,6 +24,7 @@ const joinNetwork = ({ history, url }) => (dispatch, getState) => {
         const peer = {
           attributes: {
             displayName: event.displayName,
+            isTrusted: true,
             lastSeenAt: new Date().toISOString()
           },
           id,

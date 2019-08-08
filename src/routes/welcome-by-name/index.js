@@ -18,11 +18,11 @@ const Door = styled.div`
   margin: 0;
   padding: 64px 0 0;
   text-align: center;
-  transform: translateY(32px) scale(0.9, 0.9);
+  transform: scale(0.9, 0.9);
   ${(props) => props.theme.transition('transform')}
 
   :hover {
-    transform: translateY(0) scale(1, 1);
+    transform: scale(1, 1);
   }
 `;
 
