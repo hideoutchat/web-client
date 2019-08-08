@@ -16,7 +16,7 @@ const Door = styled.div`
   cursor: pointer;
   font-size: 128px;
   margin: 0;
-  padding: 64px 0 0;
+  padding: 0;
   text-align: center;
   transform: scale(0.9, 0.9);
   ${(props) => props.theme.transition('transform')}
