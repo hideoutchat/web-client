@@ -1,5 +1,13 @@
 # Hideout for Web Browsers
 
+```
+[_]
+ |
+[_]-[_]-[_]
+ |       |
+[_]     [_]
+```
+
 [![CircleCI][1]][2]
 [![dependencies][3]][4]
 [![devDependencies][5]][4]
