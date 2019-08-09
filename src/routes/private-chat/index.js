@@ -140,7 +140,7 @@ const Shine = styled.div`
 const PrivateChatRoute = ({ history, isDistracting, messages, onLeave, onMessageEdit, onMessageReactionSelect, onMessageReactionToggle, onMessageRead, onMessageRemove, onMessageSend, topic }) => <Screen style={{ minWidth: '80%' }}>
   <Panel
     content={<Children>
-      <MessageList count={messages.length}>
+      <MessageList count={messages.reduce((a, b) => a + b.lines.length, 0)}>
         <Prologue>This is the beginning of your conversation in <b>{topic.attributes.displayName}</b>.</Prologue>
         {messages.map((it) => <MessageListItem
           actions={<Menu>
