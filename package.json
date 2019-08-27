@@ -1,6 +1,6 @@
 {
   "name": "@hideoutchat/web-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "scripts": {
     "build": "parcel build --no-autoinstall --no-source-maps --out-dir lib src/index.html",
