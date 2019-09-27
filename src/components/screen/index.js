@@ -12,7 +12,6 @@ const Screen = styled.div`
   flex: 1;
   flex-direction: column;
   margin: ${theme('space', 'huge')};
-  max-width: 80%;
   min-width: 300px;
   overflow: hidden;
 
