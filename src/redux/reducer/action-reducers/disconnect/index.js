@@ -1,6 +1,6 @@
 const DISCONNECT = (state) => ({
   ...state,
-  connection: {}
+  connection: undefined
 });
 
 export default DISCONNECT;
