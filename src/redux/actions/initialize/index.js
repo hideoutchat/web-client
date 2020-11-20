@@ -54,6 +54,7 @@ const initialize = () => async (dispatch) => {
   dispatch({ resource: publicKey, type: 'CREATE_RESOURCE' });
   dispatch({ resource: identity, type: 'CREATE_RESOURCE' });
   dispatch({ resource: self, type: 'CREATE_OR_UPDATE_RESOURCE' });
+  dispatch({ type: 'INITIALIZE' });
 };
 
 export default initialize;

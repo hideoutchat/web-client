@@ -12,8 +12,7 @@ const createRedux = (initialState = {}) => {
   const store = createStore(createReducer(initialState), applyMiddleware(...createMiddleware()));
 
   const Redux = ({ children }) => <Provider store={store}>
-    <Initializer/>
-    {children}
+    <Initializer>{children}</Initializer>
   </Provider>;
 
   Redux.propTypes = { children: PropTypes.node };

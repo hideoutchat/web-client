@@ -46,7 +46,9 @@ const joinNetwork = ({ history, url }) => (dispatch, getState) => {
 
       broadcast('identity', self.attributes);
 
-      history.push('/network');
+      if (history) {
+        history.push('/network');
+      }
     },
 
     onDisconnect: () => {

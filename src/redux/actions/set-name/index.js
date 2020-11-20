@@ -15,7 +15,9 @@ const setName = ({ history, name }) => (dispatch, getState) => {
     });
   }
 
-  history.push('/welcome');
+  if (history) {
+    history.push('/welcome');
+  }
 };
 
 export default setName;

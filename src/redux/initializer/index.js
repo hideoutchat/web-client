@@ -7,6 +7,8 @@ import initialize from '../actions/initialize';
 class Initializer extends React.Component {
   static get propTypes() {
     return {
+      children: PropTypes.node,
+      isInitialized: PropTypes.bool.isRequired,
       onMount: PropTypes.func.isRequired
     };
   }
@@ -15,14 +17,16 @@ class Initializer extends React.Component {
     this.props.onMount();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   render() {
-    return null;
+    const { children, isInitialized } = this.props;
+    return isInitialized ? children : null;
   }
 }
 
 export { Initializer };
 
-export default connect(null, (dispatch) => ({
+export default connect((state) => ({
+  isInitialized: Boolean(state.isInitialized)
+}), (dispatch) => ({
   onMount: () => dispatch(initialize())
 }))(Initializer);
